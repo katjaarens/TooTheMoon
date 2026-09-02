@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
+// Force rebuild
 
 var builder = WebApplication.CreateBuilder(args);
 
