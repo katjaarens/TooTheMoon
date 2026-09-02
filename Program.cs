@@ -3,19 +3,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
-// Force rebuild
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Datenbank
+var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(connectionString));
 
 // MVC + Razor Views
 builder.Services.AddControllersWithViews();
 
 // Session aktivieren
 builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSession(options =>
 {
     options.Cookie.HttpOnly = true;
@@ -31,7 +33,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+
 app.UseRouting();
+
 app.UseSession();
 
 app.MapControllerRoute(
