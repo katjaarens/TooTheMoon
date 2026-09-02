@@ -9,8 +9,6 @@ using TooTheMoon.Models;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 
-
-
 namespace TooTheMoon.Controllers;
 
 public class HomeController : Controller
@@ -149,6 +147,17 @@ public class HomeController : Controller
 
         var guests = await _context.RsvpGuests.OrderByDescending(g => g.CreatedAt).ToListAsync();
         return View(guests);
+    }
+
+    // --- Logout ---
+    [HttpPost]
+    public IActionResult Logout()
+    {
+        // Session komplett leeren
+        HttpContext.Session.Clear();
+        
+        // Zurück zur Admin-Login-Seite umleiten
+        return RedirectToAction("AdminLogin");
     }
 
     public IActionResult ThankYou()
