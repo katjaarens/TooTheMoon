@@ -11,11 +11,6 @@ using System.Diagnostics;
 
 namespace TooTheMoon.Controllers;
 
-public IActionResult Trauzeugen()
-{
-    return View();
-}
-
 public class HomeController : Controller
 {
     private readonly AppDbContext _context;
@@ -36,6 +31,11 @@ public class HomeController : Controller
     }
 
     public IActionResult RsvpForm()
+    {
+        return View();
+    }
+
+    public IActionResult Trauzeugen()
     {
         return View();
     }
@@ -180,5 +180,4 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
-    
 }
