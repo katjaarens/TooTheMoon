@@ -1,3 +1,6 @@
+using System;
+
+
 // Models/Guest.cs
 public class Guest
 {
