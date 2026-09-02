@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TooTheMoon</title>
-<!-- PWA Manifest & Theme -->
-<link rel="manifest" href="~/manifest.json">
-<meta name="theme-color" content="#0f172a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ToTheMoon">
+    <!-- PWA Manifest & Theme -->
+    <link rel="manifest" href="~/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ToTheMoon">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -87,7 +87,6 @@
             color: #aaa;
             font-size: 14px;
         }
-        <a asp-controller="Home" asp-action="Trauzeugen" style="color: #666; text-decoration: none; margin: 0 10px;">Trauzeugen</a>
     </style>
 </head>
 
@@ -97,6 +96,13 @@
         <p>Unsere Hochzeit – mit Liebe gestaltet</p>
     </header>
 
+    <!-- Navigation -->
+    <nav style="text-align: center; padding: 15px; background: #fff; border-bottom: 1px solid #eee;">
+        <a asp-controller="Home" asp-action="Index" style="margin: 0 15px; color: #555; text-decoration: none;">Startseite</a>
+        <a asp-controller="Home" asp-action="Trauzeugen" style="margin: 0 15px; color: #c49a87; text-decoration: none; font-weight: bold;">Trauzeugen</a>
+        <a asp-controller="Home" asp-action="RsvpForm" style="margin: 0 15px; color: #555; text-decoration: none;">RSVP</a>
+    </nav>
+
     <div class="content">
         @RenderBody()
     </div>
@@ -104,19 +110,15 @@
     <footer>
         © 2026 TooTheMoon – Andrea & Katja
     </footer>
+
     <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then((reg) => console.log('Service Worker registriert: ', reg.scope))
-        .catch((err) => console.log('Service Worker Fehler: ', err));
-    });
-  }
-  <nav style="text-align: center; margin-bottom: 20px;">
-    <a asp-controller="Home" asp-action="Index" style="margin: 0 15px; color: #555; text-decoration: none;">Startseite</a>
-    <a asp-controller="Home" asp-action="RsvpForm" style="margin: 0 15px; color: #555; text-decoration: none;">RSVP</a>
-    <a asp-controller="Home" asp-action="Trauzeugen" style="margin: 0 15px; color: #555; text-decoration: none; font-weight: bold;">Trauzeugen</a>
-</nav>
-</script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => console.log('Service Worker registriert: ', reg.scope))
+                    .catch((err) => console.log('Service Worker Fehler: ', err));
+            });
+        }
+    </script>
 </body>
-</html>
+</html>S
