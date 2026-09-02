@@ -1,0 +1,10 @@
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.csproj.AssemblyReference.cache
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.AssemblyInfoInputs.cache
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.AssemblyInfo.cs
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.csproj.CoreCompileInputs.cache
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.RazorAssemblyInfo.cache
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.RazorAssemblyInfo.cs
+C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.sourcelink.json
