@@ -1,10 +1,10 @@
 {
-  "name": "To The Moon - Wedding Admin",
-  "short_name": "Wedding Admin",
-  "start_url": "/Admin/AdminGuests",
+  "name": "Too The Moon – Hochzeit",
+  "short_name": "ToTheMoon",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
-  "theme_color": "#f472b6",
+  "theme_color": "#0f172a",
   "icons": [
     {
       "src": "/images/icon-192.png",
