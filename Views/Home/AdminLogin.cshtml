@@ -1,0 +1,41 @@
+@{
+    ViewData["Title"] = "Admin Login – Hochzeit";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body style="display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #0f172a; color: #fff;">
+
+    <div class="glass-panel" style="padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+        <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px; color: #f472b6;">🔒 Admin-Bereich</h2>
+        <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 25px;">Nur für Andrea, Katja, Heike & Lulu</p>
+
+        <form asp-action="AdminLogin" method="post">
+            <div style="margin-bottom: 15px; text-align: left;">
+                <label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: #ccc;">Dein Name</label>
+                <input type="text" name="name" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff;" placeholder="z.B. Katja" />
+            </div>
+
+            <div style="margin-bottom: 20px; text-align: left;">
+                <label style="display: block; margin-bottom: 6px; font-size: 0.85rem; color: #ccc;">Passwort</label>
+                <input type="password" name="passcode" required style="width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff;" placeholder="Geheimes Passwort" />
+            </div>
+            
+            <button type="submit" class="btn-glow" style="width: 100%; padding: 12px; cursor: pointer;">Einloggen</button>
+        </form>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <p style="color: #f87171; margin-top: 15px; font-size: 0.9rem;">Zugriff verweigert. Name oder Passwort falsch.</p>
+        }
+    </div>
+
+</body>
+</html>

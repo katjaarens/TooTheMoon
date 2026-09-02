@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TooTheMoon</name>
+    </assembly>
+    <members>
+        <member name="T:TooTheMoon.Migrations.InitWeddingDb">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.InitWeddingDb.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.InitWeddingDb.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.InitWeddingDb.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:TooTheMoon.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:TooTheMoon.Migrations.AddAdultsAndChildren">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.AddAdultsAndChildren.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.AddAdultsAndChildren.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:TooTheMoon.Migrations.AddAdultsAndChildren.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:Program">
+            <summary>
+            Auto-generated public partial Program class for top-level statement apps.
+            </summary>
+        </member>
+    </members>
+</doc>

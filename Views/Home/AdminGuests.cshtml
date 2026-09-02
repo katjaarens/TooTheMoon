@@ -1,0 +1,188 @@
+@model IEnumerable<TooTheMoon.Models.RsvpGuest>
+
+@{
+    ViewData["Title"] = "Gästeliste & RSVPs";
+}
+
+<div style="background-color: #0f172a; color: #fff; min-height: 85vh; padding: 40px 20px; border-radius: 16px; margin: 20px 0;">
+    <div class="container" style="max-width: 1200px;">
+        
+        <!-- Header-Bereich -->
+        <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;">
+            <div>
+                <h2 style="font-family: 'Playfair Display', serif; color: #f472b6; font-size: 2rem; margin-bottom: 5px;">Gästeliste & RSVPs</h2>
+                <p style="color: #94a3b8; margin-bottom: 0; font-size: 0.95rem;">Übersicht aller eingegangenen Zusagen und Statistiken</p>
+            </div>
+            <div>
+                <span style="background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.3); padding: 10px 18px; border-radius: 12px; font-size: 0.9rem; color: #f472b6; display: inline-flex; align-items: center; gap: 8px;">
+                    👤 Eingeloggt als: <strong style="color: #fff;">@Context.Session.GetString("AdminName")</strong>
+                </span>
+            </div>
+        </div>
+
+        <!-- Statistik-Card -->
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+            <h4 style="font-family: 'Playfair Display', serif; color: #f472b6; margin-bottom: 20px; font-size: 1.25rem;">📊 Planungs- & Catering-Übersicht (Nur Zusagen)</h4>
+            
+            @{
+                var attendingGuests = Model.Where(g => g.IsAttending).ToList();
+                int totalPersons = attendingGuests.Sum(g => g.NumberOfGuests);
+                int totalAdults = attendingGuests.Sum(g => g.AdultsCount);
+                int totalChildren = attendingGuests.Sum(g => g.ChildrenCount);
+                int totalMeat = attendingGuests.Sum(g => g.MeatCount);
+                int totalVeggie = attendingGuests.Sum(g => g.VeggieCount);
+                int totalVegan = attendingGuests.Sum(g => g.VeganCount);
+            }
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div style="background: rgba(0,0,0,0.2); padding: 15px 20px; border-radius: 12px; border-left: 4px solid #34d399;">
+                        <span style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 4px;">GESAMTPERSONEN</span>
+                        <span style="font-size: 1.5rem; font-weight: bold; color: #34d399;">@totalPersons</span>
+                        <span style="color: #cbd5e1; font-size: 0.9rem; margin-left: 8px;">(@totalAdults Erwachsene, @totalChildren Kinder)</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div style="background: rgba(0,0,0,0.2); padding: 15px 20px; border-radius: 12px; border-left: 4px solid #60a5fa;">
+                        <span style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 4px;">CATERING-SUMMEN</span>
+                        <div style="font-size: 1rem; margin-top: 4px;">
+                            <span style="color: #60a5fa; font-weight: 500;">@totalMeat x Fleisch</span> &bull; 
+                            <span style="color: #34d399; font-weight: 500;">@totalVeggie x Vegetarisch</span> &bull; 
+                            <span style="color: #f472b6; font-weight: 500;">@totalVegan x Vegan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter- & Suchleiste -->
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 20px; margin-bottom: 20px;" class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div style="flex: 1; min-width: 250px;">
+                <input type="text" id="guestSearch" placeholder="🔍 Nach Name oder E-Mail suchen..." onkeyup="filterGuests()" style="width: 100%; padding: 10px 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.9rem;" />
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <button onclick="setFilter('all')" class="filter-btn" style="padding: 8px 14px; background: rgba(244, 114, 182, 0.2); border: 1px solid #f472b6; color: #fff; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">Alle</button>
+                <button onclick="setFilter('attending')" class="filter-btn" style="padding: 8px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">Nur Zusagen</button>
+                <button onclick="setFilter('declined')" class="filter-btn" style="padding: 8px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">Nur Absagen</button>
+                <button onclick="setFilter('veggie')" class="filter-btn" style="padding: 8px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">🥦 Vegetarisch/Vegan</button>
+            </div>
+        </div>
+
+        <!-- Gästetabelle-Card -->
+        <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+            <h4 style="font-family: 'Playfair Display', serif; color: #f472b6; margin-bottom: 20px; font-size: 1.25rem;">📝 Alle eingegangenen Antworten</h4>
+            
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle" style="background: transparent; color: #fff; margin-bottom: 0;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid rgba(255,255,255,0.1); color: #f472b6; font-size: 0.9rem;">
+                            <th style="padding: 12px; background: transparent;">Name</th>
+                            <th style="padding: 12px; background: transparent;">E-Mail</th>
+                            <th style="padding: 12px; background: transparent;">Status</th>
+                            <th style="padding: 12px; background: transparent;">Personen</th>
+                            <th style="padding: 12px; background: transparent;">Ernährung (Mengen)</th>
+                            <th style="padding: 12px; background: transparent;">Nachricht / Songs</th>
+                            <th style="padding: 12px; background: transparent;">Datum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var guest in Model)
+                        {
+                            string filterStatus = guest.IsAttending ? "attending" : "declined";
+                            string dietStatus = (guest.VeggieCount > 0 || guest.VeganCount > 0) ? "veggie" : "";
+                            
+                            <tr class="guest-row" data-status="@filterStatus" data-diet="@dietStatus" style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td style="padding: 15px 12px; font-weight: 500; background: transparent; color: #fff;">@guest.Name</td>
+                                <td style="padding: 15px 12px; color: #94a3b8; background: transparent;">@guest.Email</td>
+                                <td style="padding: 15px 12px; background: transparent;">
+                                    @if (guest.IsAttending)
+                                    {
+                                        <span class="badge" style="background: rgba(52, 211, 153, 0.15); color: #34d399; padding: 6px 12px; border-radius: 6px; font-weight: 500;">Zusage</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge" style="background: rgba(248, 113, 113, 0.15); color: #f87171; padding: 6px 12px; border-radius: 6px; font-weight: 500;">Absage</span>
+                                    }
+                                </td>
+                                <td style="padding: 15px 12px; background: transparent; color: #fff;">
+                                    @guest.NumberOfGuests 
+                                    <span style="color: #94a3b8; font-size: 0.8rem; display: block;">(@guest.AdultsCount Erw., @guest.ChildrenCount Ki.)</span>
+                                </td>
+                                <td style="padding: 15px 12px; background: transparent;">
+                                    <span style="color: #60a5fa;">F: @guest.MeatCount</span> | 
+                                    <span style="color: #34d399;">V: @guest.VeggieCount</span> | 
+                                    <span style="color: #f472b6;">Vg: @guest.VeganCount</span>
+                                    @if(!string.IsNullOrEmpty(guest.FoodIntolerances))
+                                    {
+                                        <div style="color: #fbbf24; font-size: 0.8rem; margin-top: 3px;">⚠️ @guest.FoodIntolerances</div>
+                                    }
+                                </td>
+                                <td style="padding: 15px 12px; font-size: 0.85rem; color: #cbd5e1; background: transparent;">
+                                    @if(!string.IsNullOrEmpty(guest.SongRequest))
+                                    {
+                                        <div>🎵 @guest.SongRequest</div>
+                                    }
+                                    @if(!string.IsNullOrEmpty(guest.MessageToCouple))
+                                    {
+                                        <div style="font-style: italic; color: #94a3b8; margin-top: 2px;">"@guest.MessageToCouple"</div>
+                                    }
+                                </td>
+                                <td style="padding: 15px 12px; color: #94a3b8; font-size: 0.85rem; background: transparent;">@guest.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let currentFilter = 'all';
+
+    function setFilter(filterType) {
+        currentFilter = filterType;
+        
+        // Buttons optisch umschalten
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.style.background = 'rgba(0,0,0,0.3)';
+            btn.style.borderColor = 'rgba(255,255,255,0.15)';
+            btn.style.color = '#94a3b8';
+        });
+        
+        event.target.style.background = 'rgba(244, 114, 182, 0.2)';
+        event.target.style.borderColor = '#f472b6';
+        event.target.style.color = '#fff';
+
+        filterGuests();
+    }
+
+    function filterGuests() {
+        const searchText = document.getElementById('guestSearch').value.toLowerCase();
+        const rows = document.querySelectorAll('.guest-row');
+
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            const status = row.getAttribute('data-status');
+            const diet = row.getAttribute('data-diet');
+
+            let matchesSearch = text.includes(searchText);
+            let matchesFilter = true;
+
+            if (currentFilter === 'attending') {
+                matchesFilter = (status === 'attending');
+            } else if (currentFilter === 'declined') {
+                matchesFilter = (status === 'declined');
+            } else if (currentFilter === 'veggie') {
+                matchesFilter = (diet === 'veggie');
+            }
+
+            if (matchesSearch && matchesFilter) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+</script>
