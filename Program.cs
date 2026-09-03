@@ -3,11 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<DeinDbContext>();
-    dbContext.Database.Migrate(); // oder dbContext.Database.EnsureCreated();
-}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,11 +26,11 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// Datenbank erstellen, falls sie noch nicht existiert
+// Datenbank automatisch migrieren beim Start (für Render wichtig!)
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
 }
 
 // Middleware
