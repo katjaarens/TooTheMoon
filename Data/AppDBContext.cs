@@ -10,4 +10,14 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<RsvpGuest> RsvpGuests => Set<RsvpGuest>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        // Erzwingt für PostgreSQL ein automatisches Hochzählen der ID (SERIAL / Identity)
+        modelBuilder.Entity<RsvpGuest>()
+            .Property(r => r.Id)
+            .UseIdentityByDefaultColumn();
+    }
 }
