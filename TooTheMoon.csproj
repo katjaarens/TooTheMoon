@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
   <!-- Ignoriere SQLite-Datenbankdateien bei dotnet watch -->
   <Watch Include="**\*.db" Exclude="bin\**;obj\**" />
   <Watch Remove="**\*.db-shm" />

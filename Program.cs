@@ -3,18 +3,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
-using System.IO;
-using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Data Protection (Standard ohne festes Verzeichnis für den Render Free Plan)
 builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(@"/data/keys")) // Pfad muss auf eure gemountete Persistent Disk zeigen!
     .SetApplicationName("TooTheMoon");
-// Datenbank
-var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
+
+// Datenbank (jetzt korrekt mit PostgreSQL / Npgsql für Supabase)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseNpgsql(connectionString));
 
 // MVC + Razor Views
 builder.Services.AddControllersWithViews();
@@ -30,7 +30,7 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// Datenbank automatisch migrieren beim Start (für Render wichtig!)
+// Datenbank automatisch migrieren beim Start (legt die Tabellen in Supabase an)
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
