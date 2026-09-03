@@ -3,9 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
+using System.IO;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(@"/data/keys")) // Pfad muss auf eure gemountete Persistent Disk zeigen!
+    .SetApplicationName("TooTheMoon");
 // Datenbank
 var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 
