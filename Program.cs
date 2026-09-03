@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
 using System;
 
+Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Datenbank (mit PostgreSQL / Npgsql für Supabase)
