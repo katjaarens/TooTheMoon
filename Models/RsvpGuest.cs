@@ -30,5 +30,5 @@ public class RsvpGuest
     public string? SongRequest { get; set; }
     public string? MessageToCouple { get; set; }
     
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
