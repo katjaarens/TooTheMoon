@@ -32,18 +32,18 @@ var app = builder.Build();
 
 // Datenbank automatisch migrieren beim Start mit Fehler-Logging (fängt den Absturz ab)
 //using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    try
-    {
-        dbContext.Database.Migrate();
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("KRITISCHER FEHLER BEI DER MIGRATION: " + ex.ToString());
-        throw;
-    }
-}
+//{
+    //var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    //try
+    //{
+    //    dbContext.Database.Migrate();
+    //}
+    //catch (Exception ex)
+    //{
+      //  Console.WriteLine("KRITISCHER FEHLER BEI DER MIGRATION: " + ex.ToString());
+    //    throw;
+    //}
+//}
 
 // Middleware
 //if (!app.Environment.IsDevelopment())
