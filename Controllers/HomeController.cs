@@ -104,7 +104,7 @@ public class HomeController : Controller
             FoodIntolerances = foodIntolerances,
             SongRequest = songRequest,
             MessageToCouple = messageToCouple,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.UtcNow
         };
 
         // In die SQLite-Datenbank schreiben
