@@ -6,11 +6,7 @@ using TooTheMoon.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Data Protection (Standard ohne festes Verzeichnis für den Render Free Plan)
-builder.Services.AddDataProtection()
-    .SetApplicationName("TooTheMoon");
-
-// Datenbank (jetzt korrekt mit PostgreSQL / Npgsql für Supabase)
+// Datenbank (mit PostgreSQL / Npgsql für Supabase)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -30,7 +26,7 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// Datenbank automatisch migrieren beim Start (legt die Tabellen in Supabase an)
+// Datenbank automatisch migrieren beim Start
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
