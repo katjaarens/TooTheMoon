@@ -31,7 +31,7 @@ builder.Services.AddSession(options =>
 var app = builder.Build();
 
 // Datenbank automatisch migrieren beim Start mit Fehler-Logging (fängt den Absturz ab)
-using (var scope = app.Services.CreateScope())
+//using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     try
@@ -46,10 +46,10 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Middleware
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-}
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseExceptionHandler("/Home/Error");
+//}
 
 app.UseStaticFiles();
 
