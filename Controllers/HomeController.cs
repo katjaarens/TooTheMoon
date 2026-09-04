@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
 using TooTheMoon.Models;
-using Microsoft.AspNetCore.Http;
-using System.Diagnostics;
 
 namespace TooTheMoon.Controllers;
 
@@ -42,22 +40,37 @@ public class HomeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> SubmitRsvp(string name, string email, string attending, bool hasCompanion, string children, string diet, int meatCount, int veggieCount, int veganCount, string foodIntolerances, string songRequest, string messageToCouple)
+    public async Task<IActionResult> SubmitRsvp(
+        string name,
+        string email,
+        string attending,
+        bool hasCompanion,
+        string children,
+        string diet,
+        int meatCount,
+        int veggieCount,
+        int veganCount,
+        string foodIntolerances,
+        string songRequest,
+        string messageToCouple)
     {
-        // 1. Zusage prüfen (unterstützt "Ja", "yes", "true" etc.)
-        bool isAttending = !string.IsNullOrEmpty(attending) && 
-                           (attending.Equals("Ja", StringComparison.OrdinalIgnoreCase) || 
-                            attending.Equals("true", StringComparison.OrdinalIgnoreCase) || 
-                            attending.Equals("yes", StringComparison.OrdinalIgnoreCase));
+        bool isAttending =
+            !string.IsNullOrEmpty(attending) &&
+            (
+                attending.Equals("Ja", StringComparison.OrdinalIgnoreCase) ||
+                attending.Equals("true", StringComparison.OrdinalIgnoreCase) ||
+                attending.Equals("yes", StringComparison.OrdinalIgnoreCase)
+            );
 
-        // 2. Erwachsene und Kinder getrennt berechnen
-        int adultsCount = 1; // Hauptgast
+        int adultsCount = 1;
+
         if (hasCompanion)
         {
-            adultsCount += 1;
+            adultsCount++;
         }
 
         int childrenCount = 0;
+
         if (!string.IsNullOrEmpty(children))
         {
             if (children.Contains("1"))
@@ -70,14 +83,14 @@ public class HomeController : Controller
             }
             else if (children.Contains("3") || children.Contains("+"))
             {
-                childrenCount = 3; 
+                childrenCount = 3;
             }
         }
 
-        // Gesamtsumme der Personen
-        int totalPersons = isAttending ? (adultsCount + childrenCount) : 1;
+        int totalPersons = isAttending
+            ? adultsCount + childrenCount
+            : 1;
 
-        // Falls abgesagt wurde, Zähler auf 0 bzw. Standard setzen
         if (!isAttending)
         {
             adultsCount = 0;
@@ -88,7 +101,6 @@ public class HomeController : Controller
             veganCount = 0;
         }
 
-        // Gast-Objekt erstellen inklusive der Catering-Zähler
         var guest = new RsvpGuest
         {
             Name = name,
@@ -96,7 +108,7 @@ public class HomeController : Controller
             IsAttending = isAttending,
             AdultsCount = adultsCount,
             ChildrenCount = childrenCount,
-            NumberOfGuests = totalPersons, 
+            NumberOfGuests = totalPersons,
             DietaryNotes = diet,
             MeatCount = meatCount,
             VeggieCount = veggieCount,
@@ -107,101 +119,149 @@ public class HomeController : Controller
             CreatedAt = DateTime.UtcNow
         };
 
-        // In die Datenbank schreiben
         _context.RsvpGuests.Add(guest);
         await _context.SaveChangesAsync();
-        
-        return RedirectToAction("ThankYou");
+
+        return RedirectToAction(nameof(ThankYou));
     }
 
-    // --- Admin Login (GET) ---
     [HttpGet]
     public IActionResult AdminLogin()
     {
         return View();
     }
 
-    // --- Admin Login (POST) mit Namensprüfung für Katja, Andrea, Heike & Lulu ---
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult AdminLogin(string name, string passcode)
     {
-        // Berechtigte Personen
-        var allowedNames = new[] { "Andrea", "Katja", "Heike", "Lulu" };
+        var allowedNames = new[]
+        {
+            "Andrea",
+            "Katja",
+            "Heike",
+            "Lulu"
+        };
 
-        bool isValidName = allowedNames.Any(n => n.Equals(name?.Trim(), StringComparison.OrdinalIgnoreCase));
-        string correctPassword = "ToTheMoon2027!"; // Euer gemeinsames Passwort
+        bool isValidName = allowedNames.Any(n =>
+            n.Equals(name?.Trim(), StringComparison.OrdinalIgnoreCase));
 
-        if (isValidName && passcode == correctPassword)
+        string? correctPassword =
+            Environment.GetEnvironmentVariable("ToTheMoon2027!");
+
+        bool isValidPassword =
+            !string.IsNullOrEmpty(correctPassword) &&
+            passcode == correctPassword;
+
+        if (isValidName && isValidPassword)
         {
             HttpContext.Session.SetString("IsAdmin", "True");
-            HttpContext.Session.SetString("AdminName", name.Trim());
-            return RedirectToAction("AdminGuests");
+            HttpContext.Session.SetString("AdminName", name!.Trim());
+
+            return RedirectToAction(nameof(AdminGuests));
         }
 
-        ModelState.AddModelError("", "Ungültiger Name oder falsches Passwort!");
+        ModelState.AddModelError(
+            string.Empty,
+            "Ungültiger Name oder falsches Passwort!");
+
         return View();
     }
 
-    // Admin-Ansicht zum Auslesen aller Gäste (abgesichert)
+    [HttpGet]
     public async Task<IActionResult> AdminGuests()
     {
-        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        if (!IsAdmin())
         {
-            return RedirectToAction("AdminLogin");
+            return RedirectToAction(nameof(AdminLogin));
         }
 
-        var guests = await _context.RsvpGuests.OrderByDescending(g => g.CreatedAt).ToListAsync();
+        var guests = await _context.RsvpGuests
+            .OrderByDescending(g => g.CreatedAt)
+            .ToListAsync();
+
         return View(guests);
     }
 
-    // --- Gast löschen ---
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteGuest(int id)
     {
-        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        if (!IsAdmin())
         {
-            return RedirectToAction("AdminLogin");
+            return RedirectToAction(nameof(AdminLogin));
         }
 
         var guest = await _context.RsvpGuests.FindAsync(id);
+
         if (guest != null)
         {
             _context.RsvpGuests.Remove(guest);
             await _context.SaveChangesAsync();
         }
 
-        return RedirectToAction("AdminGuests");
+        return RedirectToAction(nameof(AdminGuests));
     }
 
-    // --- Sitzplan-Verwaltung (Timeout-optimiert) ---
     [HttpGet]
     public async Task<IActionResult> AdminSeatingPlanner()
     {
-        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        if (!IsAdmin())
         {
-            return RedirectToAction("AdminLogin");
+            return RedirectToAction(nameof(AdminLogin));
         }
 
-        // Getrennte, schnelle Abfragen statt schwerer Joins
-        var tables = await _context.WeddingTables.ToListAsync();
-        var allGuests = await _context.RsvpGuests.ToListAsync();
-
-        ViewBag.AttendingGuests = allGuests.Where(g => g.IsAttending).ToList();
-
-        foreach (var table in tables)
+        try
         {
-            table.Guests = allGuests.Where(g => g.WeddingTableId == table.Id).ToList();
-        }
+            Console.WriteLine("AdminSeatingPlanner gestartet");
 
-        return View(tables);
+            Console.WriteLine("Lade WeddingTables...");
+            var tables = await _context.WeddingTables
+                .AsNoTracking()
+                .ToListAsync();
+
+            Console.WriteLine($"Tische geladen: {tables.Count}");
+
+            Console.WriteLine("Lade RsvpGuests...");
+            var allGuests = await _context.RsvpGuests
+                .AsNoTracking()
+                .ToListAsync();
+
+            Console.WriteLine($"Gäste geladen: {allGuests.Count}");
+
+            ViewBag.AttendingGuests = allGuests
+                .Where(g => g.IsAttending)
+                .ToList();
+
+            foreach (var table in tables)
+            {
+                table.Guests = allGuests
+                    .Where(g => g.WeddingTableId == table.Id)
+                    .ToList();
+            }
+
+            Console.WriteLine("View wird geladen");
+
+            return View(tables);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("FEHLER IM SITZPLAN:");
+            Console.WriteLine(ex.ToString());
+
+            return StatusCode(500, ex.ToString());
+        }
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddTable(string tableName, int capacity)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddTable(
+        string tableName,
+        int capacity)
     {
-        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        if (!IsAdmin())
         {
-            return RedirectToAction("AdminLogin");
+            return RedirectToAction(nameof(AdminLogin));
         }
 
         if (!string.IsNullOrWhiteSpace(tableName))
@@ -211,19 +271,21 @@ public class HomeController : Controller
                 Name = tableName.Trim(),
                 Capacity = capacity > 0 ? capacity : 8
             };
+
             _context.WeddingTables.Add(table);
             await _context.SaveChangesAsync();
         }
 
-        return RedirectToAction("AdminSeatingPlanner");
+        return RedirectToAction(nameof(AdminSeatingPlanner));
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteTable(int id)
     {
-        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        if (!IsAdmin())
         {
-            return RedirectToAction("AdminLogin");
+            return RedirectToAction(nameof(AdminLogin));
         }
 
         var table = await _context.WeddingTables
@@ -241,33 +303,43 @@ public class HomeController : Controller
             await _context.SaveChangesAsync();
         }
 
-        return RedirectToAction("AdminSeatingPlanner");
+        return RedirectToAction(nameof(AdminSeatingPlanner));
     }
 
     [HttpPost]
-    public async Task<IActionResult> AssignGuestToTable(int guestId, int? tableId)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AssignGuestToTable(
+        int guestId,
+        int? tableId)
     {
-        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        if (!IsAdmin())
         {
-            return RedirectToAction("AdminLogin");
+            return RedirectToAction(nameof(AdminLogin));
         }
 
-        var guest = await _context.RsvpGuests.FindAsync(guestId);
+        var guest = await _context.RsvpGuests
+            .FirstOrDefaultAsync(g => g.Id == guestId);
+
         if (guest != null)
         {
-            guest.WeddingTableId = (tableId.HasValue && tableId.Value > 0) ? tableId.Value : (int?)null;
+            guest.WeddingTableId =
+                tableId.HasValue && tableId.Value > 0
+                    ? tableId.Value
+                    : null;
+
             await _context.SaveChangesAsync();
         }
 
-        return RedirectToAction("AdminSeatingPlanner");
+        return RedirectToAction(nameof(AdminSeatingPlanner));
     }
 
-    // --- Logout ---
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
-        return RedirectToAction("AdminLogin");
+
+        return RedirectToAction(nameof(AdminLogin));
     }
 
     public IActionResult ThankYou()
@@ -280,9 +352,20 @@ public class HomeController : Controller
         return View();
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [ResponseCache(
+        Duration = 0,
+        Location = ResponseCacheLocation.None,
+        NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(new ErrorViewModel
+        {
+            RequestId = HttpContext.TraceIdentifier
+        });
+    }
+
+    private bool IsAdmin()
+    {
+        return HttpContext.Session.GetString("IsAdmin") == "True";
     }
 }
