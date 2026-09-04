@@ -14,4 +14,7 @@ public class WeddingTable
 
     // Verknüpfung zu den Gästen an diesem Tisch
     public ICollection<RsvpGuest> Guests { get; set; } = new List<RsvpGuest>();
+
+    public int PosX { get; set; } = 100; // Prozent oder Pixel von links
+public int PosY { get; set; } = 100; // Prozent oder Pixel von oben
 }
