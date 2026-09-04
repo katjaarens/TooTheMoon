@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
 using System;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.DataProtection; // Wichtig für die Data-Protection-Anpassung
 
 Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
@@ -20,6 +21,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // MVC + Razor Views
 builder.Services.AddControllersWithViews();
 
+// Data Protection absichern, damit Container-Neustarts auf Render Cookies nicht ungültig machen
+builder.Services.AddDataProtection()
+    .SetApplicationName("TooTheMoonWeddingApp");
+
 // Session aktivieren & Cookie-Sicherheit für Render-Proxy anpassen
 builder.Services.AddDistributedMemoryCache();
 
@@ -32,7 +37,7 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// WICHTIG: Forwarded Headers für Render aktivieren, damit HTTPS und IP-Adressen korrekt durchgereicht werden
+// WICHTIG: Forwarded Headers für Render aktivieren, damit HTTPS korrekt erkannt wird
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
