@@ -31,4 +31,8 @@ public class RsvpGuest
     public string? MessageToCouple { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    // Neu für die Sitzordnung
+    public int? WeddingTableId { get; set; }
+    public WeddingTable? WeddingTable { get; set; }
 }

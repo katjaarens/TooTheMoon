@@ -10,15 +10,21 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<RsvpGuest> RsvpGuests => Set<RsvpGuest>();
+    public DbSet<WeddingTable> WeddingTables => Set<WeddingTable>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Expliziter Tabellenname und automatisches Hochzählen für PostgreSQL (SERIAL / Identity)
         modelBuilder.Entity<RsvpGuest>()
             .ToTable("RsvpGuests")
             .Property(r => r.Id)
             .UseIdentityByDefaultColumn();
+
+        modelBuilder.Entity<RsvpGuest>()
+            .HasOne(g => g.WeddingTable)
+            .WithMany(t => t.Guests)
+            .HasForeignKey(g => g.WeddingTableId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
