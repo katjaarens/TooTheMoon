@@ -147,7 +147,7 @@ public class HomeController : Controller
             n.Equals(name?.Trim(), StringComparison.OrdinalIgnoreCase));
 
         string? correctPassword =
-            Environment.GetEnvironmentVariable("ToTheMoon2027!");
+            Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
 
         bool isValidPassword =
             !string.IsNullOrEmpty(correctPassword) &&
