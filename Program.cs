@@ -5,8 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
 using System;
+using Microsoft.AspNetCore.Http; // <--- Das hat gefehlt!
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.DataProtection; // Wichtig für die Data-Protection-Anpassung
+using Microsoft.AspNetCore.DataProtection;
 
 Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
@@ -21,7 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // MVC + Razor Views
 builder.Services.AddControllersWithViews();
 
-// Data Protection absichern, damit Container-Neustarts auf Render Cookies nicht ungültig machen
+// Data Protection absichern, damit Container-Neustarts Cookies nicht ungültig machen
 builder.Services.AddDataProtection()
     .SetApplicationName("TooTheMoonWeddingApp");
 
