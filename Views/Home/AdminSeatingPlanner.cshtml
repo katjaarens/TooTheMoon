@@ -1,137 +1,97 @@
 @model IEnumerable<TooTheMoon.Models.WeddingTable>
 
 @{
-    ViewData["Title"] = "Sitzplan-Verwaltung";
+    ViewData["Title"] = "Sitzplan verwalten";
     var attendingGuests = ViewBag.AttendingGuests as List<TooTheMoon.Models.RsvpGuest> ?? new List<TooTheMoon.Models.RsvpGuest>();
-    var assignedGuestIds = Model.SelectMany(t => t.Guests).Select(g => g.Id).ToHashSet();
-    var unassignedGuests = attendingGuests.Where(g => !assignedGuestIds.Contains(g.Id)).ToList();
 }
 
-<div class="container mt-4 mb-5">
-    <h2 class="mb-4">Sitzplan für die Hochzeit</h2>
+<div class="container mt-4">
+    <h2>Sitzplan verwalten</h2>
+    <hr />
 
     <div class="row">
-        <!-- Linke Spalte: Unzugewiesene Gäste & Neuer Tisch -->
+        <!-- Linke Spalte: Alle zugesagten Gäste noch ohne Tisch -->
         <div class="col-md-4">
-            <!-- Neuen Tisch anlegen -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Tisch hinzufügen</h5>
-                </div>
-                <div class="card-body">
-                    <form asp-action="AddTable" method="post">
-                        <div class="mb-3">
-                            <label class="form-label">Tischname / Nummer</label>
-                            <input type="text" name="tableName" class="form-control" placeholder="z.B. Tisch 1 oder Brauttisch" required />
+            <h4>Zugesagte Gäste</h4>
+            <div class="list-group mb-4" style="max-height: 500px; overflow-y: auto;">
+                @foreach (var guest in attendingGuests.Where(g => g.WeddingTableId == null))
+                {
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>@guest.Name</strong>
+                            <br /><small class="text-muted">Personen: @guest.NumberOfGuests</small>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Maximale Plätze</label>
-                            <input type="number" name="capacity" class="form-control" value="8" min="1" max="20" required />
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">Tisch erstellen</button>
-                    </form>
-                </div>
+                        <form asp-action="AssignGuestToTable" method="post" class="d-inline">
+                            <input type="hidden" name="guestId" value="@guest.Id" />
+                            <select name="tableId" class="form-select form-select-sm d-inline-block w-auto" onchange="this.form.submit()">
+                                <option value="">Tisch wählen...</option>
+                                @foreach (var table in Model)
+                                {
+                                    <option value="@table.Id">@table.Name</option>
+                                }
+                            </select>
+                        </form>
+                    </div>
+                }
             </div>
 
-            <!-- Liste der Gäste ohne Tisch -->
-            <div class="card shadow-sm">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">Gäste ohne Tisch (@unassignedGuests.Count)</h5>
-                </div>
-                <div class="card-body p-2" style="max-height: 450px; overflow-y: auto;">
-                    @if (!unassignedGuests.Any())
-                    {
-                        <p class="text-muted text-center my-3">Alle zugesagten Gäste haben einen Platz! 🎉</p>
-                    }
-                    else
-                    {
-                        <ul class="list-group">
-                            @foreach (var guest in unassignedGuests)
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center py-2">
-                                    <span>@guest.Name</span>
-                                    <span class="badge bg-info text-dark">@guest.NumberOfGuests Pers.</span>
-                                </li>
-                            }
-                        </ul>
-                    }
-                </div>
+            <!-- Neuen Tisch anlegen -->
+            <div class="card p-3 bg-light">
+                <h5>Neuen Tisch erstellen</h5>
+                <form asp-action="AddTable" method="post">
+                    <div class="mb-2">
+                        <label class="form-label">Tischname</label>
+                        <input type="text" name="tableName" class="form-control" required />
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Kapazität</label>
+                        <input type="number" name="capacity" class="form-control" value="8" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm w-100">Tisch hinzufügen</button>
+                </form>
             </div>
         </div>
 
-        <!-- Rechte Spalte: Die Tische und ihre Gäste -->
+        <!-- Rechte Spalte: Tische und zugewiesene Gäste -->
         <div class="col-md-8">
+            <h4>Tische</h4>
             <div class="row">
-                @if (!Model.Any())
+                @foreach (var table in Model)
                 {
-                    <div class="col-12">
-                        <div class="alert alert-warning text-center">
-                            Es wurden noch keine Tische angelegt. Erstelle links deinen ersten Tisch!
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    @foreach (var table in Model)
-                    {
-                        var isFull = table.Guests.Count >= table.Capacity;
-                        <div class="col-md-6 mb-4">
-                            <div class="card shadow-sm h-100 border-@(isFull ? "danger" : "secondary")">
-                                <div class="card-header d-flex justify-content-between align-items-center bg-light">
-                                    <h5 class="mb-0">@table.Name</h5>
-                                    <div>
-                                        <span class="badge bg-@(isFull ? "danger" : "secondary")">
-                                            @table.Guests.Count / @table.Capacity Plätze
-                                        </span>
-                                        <form asp-action="DeleteTable" method="post" class="d-inline ms-2" onsubmit="return confirm('Tisch wirklich löschen? Die Gäste werden wieder freigestellt.');">
-                                            <input type="hidden" name="id" value="@table.Id" />
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Tisch löschen">X</button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    @if (!table.Guests.Any())
-                                    {
-                                        <p class="text-muted small text-center my-2">Noch keine Gäste zugewiesen.</p>
-                                    }
-                                    else
-                                    {
-                                        <ul class="list-group list-group-flush mb-3">
-                                            @foreach (var guest in table.Guests)
-                                            {
-                                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-1">
-                                                    <span class="small">@guest.Name</span>
-                                                    <form asp-action="AssignGuestToTable" method="post" class="d-inline">
-                                                        <input type="hidden" name="guestId" value="@guest.Id" />
-                                                        <input type="hidden" name="tableId" value="" />
-                                                        <button type="submit" class="btn btn-sm btn-outline-secondary py-0 px-1" style="font-size: 0.75rem;" title="Vom Tisch entfernen">Entfernen</button>
-                                                    </form>
-                                                </li>
-                                            }
-                                        </ul>
-                                    }
-
-                                    <!-- Gast zu diesem Tisch hinzufügen (Dropdown) -->
-                                    @if (!isFull && unassignedGuests.Any())
-                                    {
-                                        <form asp-action="AssignGuestToTable" method="post" class="mt-auto">
-                                            <input type="hidden" name="tableId" value="@table.Id" />
-                                            <div class="input-group input-group-sm">
-                                                <select name="guestId" class="form-select form-select-sm" required>
-                                                    <option value="">Gast zuweisen...</option>
-                                                    @foreach (var guest in unassignedGuests)
-                                                    {
-                                                        <option value="@guest.Id">@guest.Name (@guest.NumberOfGuests Pers.)</option>
-                                                    }
-                                                </select>
-                                                <button class="btn btn-outline-primary" type="submit">Zuweisen</button>
-                                            </div>
-                                        </form>
-                                    }
-                                </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
+                                <strong>@table.Name</strong>
+                                <span>(Plätze: @(table.Guests?.Sum(g => g.NumberOfGuests) ?? 0) / @table.Capacity)</span>
+                                <form asp-action="DeleteTable" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@table.Id" />
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tisch wirklich löschen?')">X</button>
+                                </form>
+                            </div>
+                            <div class="card-body">
+                                @if (table.Guests != null && table.Guests.Any())
+                                {
+                                    <ul class="list-group">
+                                        @foreach (var guest in table.Guests)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between align-items-center py-1">
+                                                <span>@guest.Name (@guest.NumberOfGuests P.)</span>
+                                                <form asp-action="AssignGuestToTable" method="post" class="d-inline">
+                                                    <input type="hidden" name="guestId" value="@guest.Id" />
+                                                    <input type="hidden" name="tableId" value="" />
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-1" title="Vom Tisch entfernen">×</button>
+                                                </form>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p class="text-muted small mb-0">Noch keine Gäste zugewiesen.</p>
+                                }
                             </div>
                         </div>
-                    }
+                    </div>
                 }
             </div>
         </div>
