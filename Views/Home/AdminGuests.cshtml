@@ -90,6 +90,7 @@
                             <th style="padding: 12px; background: transparent;">Ernährung (Mengen)</th>
                             <th style="padding: 12px; background: transparent;">Nachricht / Songs</th>
                             <th style="padding: 12px; background: transparent;">Datum</th>
+                            <th style="padding: 12px; background: transparent; text-align: center;">Aktion</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -135,6 +136,11 @@
                                     }
                                 </td>
                                 <td style="padding: 15px 12px; color: #94a3b8; font-size: 0.85rem; background: transparent;">@guest.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td style="padding: 15px 12px; text-align: center; background: transparent;">
+                                    <form asp-controller="Home" asp-action="DeleteGuest" asp-route-id="@guest.Id" method="post" class="m-0" onsubmit="return confirm('Möchtest du den Eintrag von @guest.Name wirklich löschen?');">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" style="padding: 4px 10px; font-size: 0.8rem; border-radius: 6px;">Löschen</button>
+                                    </form>
+                                </td>
                             </tr>
                         }
                     </tbody>

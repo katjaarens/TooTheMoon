@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "amwHpgl7R6c=",
+  "dgSpecHash": "ShHMDC+CjRc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj",
+  "projectFilePath": "c:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\brainyuser\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\brainyuser\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
@@ -53,10 +53,10 @@
     "C:\\Users\\brainyuser\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
     "C:\\Users\\brainyuser\\.nuget\\packages\\system.text.json\\8.0.0\\system.text.json.8.0.0.nupkg.sha512",
     "C:\\Users\\brainyuser\\.nuget\\packages\\system.threading.channels\\6.0.0\\system.threading.channels.6.0.0.nupkg.sha512",
-    "C:\\Users\\brainyuser\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.29\\microsoft.aspnetcore.app.ref.8.0.29.nupkg.sha512",
-    "C:\\Users\\brainyuser\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.29\\microsoft.netcore.app.host.win-x64.8.0.29.nupkg.sha512",
     "C:\\Users\\brainyuser\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.29\\microsoft.netcore.app.ref.8.0.29.nupkg.sha512",
-    "C:\\Users\\brainyuser\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.29\\microsoft.windowsdesktop.app.ref.8.0.29.nupkg.sha512"
+    "C:\\Users\\brainyuser\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.29\\microsoft.windowsdesktop.app.ref.8.0.29.nupkg.sha512",
+    "C:\\Users\\brainyuser\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.29\\microsoft.aspnetcore.app.ref.8.0.29.nupkg.sha512",
+    "C:\\Users\\brainyuser\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.29\\microsoft.netcore.app.host.win-x64.8.0.29.nupkg.sha512"
   ],
   "logs": []
 }

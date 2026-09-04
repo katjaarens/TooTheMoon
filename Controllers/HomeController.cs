@@ -153,6 +153,24 @@ public class HomeController : Controller
         var guests = await _context.RsvpGuests.OrderByDescending(g => g.CreatedAt).ToListAsync();
         return View(guests);
     }
+    // --- Gast löschen ---
+    [HttpPost]
+    public async Task<IActionResult> DeleteGuest(int id)
+    {
+        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        {
+            return RedirectToAction("AdminLogin");
+        }
+
+        var guest = await _context.RsvpGuests.FindAsync(id);
+        if (guest != null)
+        {
+            _context.RsvpGuests.Remove(guest);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("AdminGuests");
+    }
 
     // --- Logout ---
     [HttpPost]
