@@ -15,18 +15,10 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Erzwingt für PostgreSQL ein automatisches Hochzählen der ID (SERIAL / Identity)
+        // Expliziter Tabellenname und automatisches Hochzählen für PostgreSQL (SERIAL / Identity)
         modelBuilder.Entity<RsvpGuest>()
+            .ToTable("RsvpGuests")
             .Property(r => r.Id)
             .UseIdentityByDefaultColumn();
     }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
-    base.OnModelCreating(modelBuilder);
-
-    modelBuilder.Entity<RsvpGuest>()
-        .ToTable("RsvpGuests") // Entspricht exakt dem Tabellennamen in Postgres
-        .Property(r => r.Id)
-        .UseIdentityByDefaultColumn();
-}
 }
