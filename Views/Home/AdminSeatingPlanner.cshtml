@@ -2,98 +2,158 @@
 
 @{
     ViewData["Title"] = "Sitzplan verwalten";
+    Layout = null; // Falls ihr ein eigenes Layout nutzt, hier anpassen
     var attendingGuests = ViewBag.AttendingGuests as List<TooTheMoon.Models.RsvpGuest> ?? new List<TooTheMoon.Models.RsvpGuest>();
 }
 
-<div class="container mt-4">
-    <h2>Sitzplan verwalten</h2>
-    <hr />
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body style="background-color: #0b0f19; color: #fff; font-family: 'Inter', sans-serif; padding-bottom: 50px;">
 
-    <div class="row">
-        <!-- Linke Spalte: Alle zugesagten Gäste noch ohne Tisch -->
-        <div class="col-md-4">
-            <h4>Zugesagte Gäste</h4>
-            <div class="list-group mb-4" style="max-height: 500px; overflow-y: auto;">
-                @foreach (var guest in attendingGuests.Where(g => g.WeddingTableId == null))
-                {
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>@guest.Name</strong>
-                            <br /><small class="text-muted">Personen: @guest.NumberOfGuests</small>
+    <header>
+        <a href="/" class="logo">Andrea & Katja</a>
+        <nav>
+            <a href="/">Zur Startseite</a>
+            <a href="/Home/AdminGuests" style="color: #f472b6;">Sitzplan-Admin</a>
+        </nav>
+    </header>
+
+    <div class="container" style="max-width: 1200px; margin: 100px auto 0 auto; padding: 0 20px;">
+        
+        <div class="glass-panel" style="padding: 40px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; backdrop-filter: blur(12px);">
+            
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #fff; margin-bottom: 5px;">Sitzplan verwalten</h2>
+            <div style="color: #f472b6; font-size: 0.95rem; margin-bottom: 25px;">Ordne deine Gäste den jeweiligen Tischen zu und behalte den Überblick über die Raumaufteilung.</div>
+            <hr style="border-color: rgba(255,255,255,0.1); margin-bottom: 30px;" />
+
+            <!-- OPTIONALER SAALPLAN / GRAFIK BEREICH -->
+            <div style="margin-bottom: 40px; text-align: center;">
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #fff; margin-bottom: 12px;">Sprikeltrix – Raum- & Saalplan</h3>
+                <div style="background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); display: inline-block; max-width: 100%;">
+                    <!-- Lege deine Grafik einfach als 'saalplan.jpg' in den Ordner wwwroot/images/ ab -->
+                    <img src="~/images/saalplan.jpg" alt="Saalplan Übersicht" style="max-width: 100%; height: auto; border-radius: 10px; display: block; margin: 0 auto;" onerror="this.style.display='none'; document.getElementById('no-plan-text').style.display='block';" />
+                    <p id="no-plan-text" style="display: none; color: #94a3b8; font-size: 0.9rem; margin: 10px 0;">(Noch kein Saalplan-Bild unter <code>wwwroot/images/saalplan.jpg</code> hinterlegt)</p>
+                </div>
+            </div>
+
+            <div class="row" style="display: flex; flex-wrap: wrap; gap: 30px;">
+                
+                <!-- Linke Spalte: Alle zugesagten Gäste noch ohne Tisch & Neuer Tisch -->
+                <div style="flex: 1; min-width: 300px; max-width: 380px;">
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 20px; margin-bottom: 25px;">
+                        <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 15px; font-weight: 600;">Unzugewiesene Gäste</h4>
+                        
+                        <div style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+                            @{
+                                var unassignedGuests = attendingGuests.Where(g => g.WeddingTableId == null).ToList();
+                            }
+                            @if (!unassignedGuests.Any())
+                            {
+                                <p style="color: #94a3b8; font-size: 0.9rem;">Alle zugesagten Gäste haben einen Tisch! 🎉</p>
+                            }
+                            @foreach (var guest in unassignedGuests)
+                            {
+                                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong style="color: #fff; font-size: 0.95rem;">@guest.Name</strong><br />
+                                        <small style="color: #94a3b8;">Personen: @guest.NumberOfGuests</small>
+                                    </div>
+                                    <form asp-action="AssignGuestToTable" method="post" style="margin: 0;">
+                                        <input type="hidden" name="guestId" value="@guest.Id" />
+                                        <select name="tableId" onchange="this.form.submit()" style="background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 5px 8px; border-radius: 6px; font-size: 0.85rem;">
+                                            <option value="">Tisch...</option>
+                                            @foreach (var table in Model)
+                                            {
+                                                <option value="@table.Id">@table.Name</option>
+                                            }
+                                        </select>
+                                    </form>
+                                </div>
+                            }
                         </div>
-                        <form asp-action="AssignGuestToTable" method="post" class="d-inline">
-                            <input type="hidden" name="guestId" value="@guest.Id" />
-                            <select name="tableId" class="form-select form-select-sm d-inline-block w-auto" onchange="this.form.submit()">
-                                <option value="">Tisch wählen...</option>
-                                @foreach (var table in Model)
-                                {
-                                    <option value="@table.Id">@table.Name</option>
-                                }
-                            </select>
+                    </div>
+
+                    <!-- Neuen Tisch anlegen -->
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; padding: 20px;">
+                        <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 15px; font-weight: 600;">Neuen Tisch erstellen</h4>
+                        <form asp-action="AddTable" method="post">
+                            <div style="margin-bottom: 12px;">
+                                <label style="display: block; font-size: 0.85rem; color: #ccc; margin-bottom: 5px;">Tischname</label>
+                                <input type="text" name="tableName" required placeholder="z. B. Brauttisch" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.9rem;" />
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; font-size: 0.85rem; color: #ccc; margin-bottom: 5px;">Kapazität</label>
+                                <input type="number" name="capacity" value="8" required style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.9rem;" />
+                            </div>
+                            <button type="submit" class="btn-glow" style="width: 100%; padding: 10px; font-size: 0.9rem; border-radius: 8px; border: none; cursor: pointer;">Tisch hinzufügen</button>
                         </form>
                     </div>
-                }
-            </div>
+                </div>
 
-            <!-- Neuen Tisch anlegen -->
-            <div class="card p-3 bg-light">
-                <h5>Neuen Tisch erstellen</h5>
-                <form asp-action="AddTable" method="post">
-                    <div class="mb-2">
-                        <label class="form-label">Tischname</label>
-                        <input type="text" name="tableName" class="form-control" required />
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Kapazität</label>
-                        <input type="number" name="capacity" class="form-control" value="8" required />
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-sm w-100">Tisch hinzufügen</button>
-                </form>
-            </div>
-        </div>
+                <!-- Rechte Spalte: Tische als optische Raum-Inseln -->
+                <div style="flex: 2; min-width: 320px;">
+                    <h4 style="font-size: 1.2rem; color: #fff; margin-bottom: 15px; font-weight: 600;">Tisch-Layout im Raum</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        @foreach (var table in Model)
+                        {
+                            var currentOccupancy = table.Guests?.Sum(g => g.NumberOfGuests) ?? 0;
+                            <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                                
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+                                        <h5 style="color: #f472b6; margin: 0; font-size: 1.1rem; font-family: 'Playfair Display', serif;">@table.Name</h5>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 0.8rem; background: rgba(244,114,182,0.15); color: #ff9cf2; padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(244,114,182,0.3);">
+                                                @currentOccupancy / @table.Capacity P.
+                                            </span>
+                                            <form asp-action="DeleteTable" method="post" style="margin: 0;">
+                                                <input type="hidden" name="id" value="@table.Id" />
+                                                <button type="submit" onclick="return confirm('Tisch wirklich löschen?')" title="Tisch löschen" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; justify-content: center;">×</button>
+                                            </form>
+                                        </div>
+                                    </div>
 
-        <!-- Rechte Spalte: Tische und zugewiesene Gäste -->
-        <div class="col-md-8">
-            <h4>Tische</h4>
-            <div class="row">
-                @foreach (var table in Model)
-                {
-                    <div class="col-md-6 mb-3">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
-                                <strong>@table.Name</strong>
-                                <span>(Plätze: @(table.Guests?.Sum(g => g.NumberOfGuests) ?? 0) / @table.Capacity)</span>
-                                <form asp-action="DeleteTable" method="post" class="d-inline">
-                                    <input type="hidden" name="id" value="@table.Id" />
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tisch wirklich löschen?')">X</button>
-                                </form>
-                            </div>
-                            <div class="card-body">
-                                @if (table.Guests != null && table.Guests.Any())
-                                {
-                                    <ul class="list-group">
-                                        @foreach (var guest in table.Guests)
+                                    <!-- Zugewiesene Gäste als schicke Chips -->
+                                    <div style="min-height: 70px; margin-bottom: 15px;">
+                                        @if (table.Guests != null && table.Guests.Any())
                                         {
-                                            <li class="list-group-item d-flex justify-content-between align-items-center py-1">
-                                                <span>@guest.Name (@guest.NumberOfGuests P.)</span>
-                                                <form asp-action="AssignGuestToTable" method="post" class="d-inline">
-                                                    <input type="hidden" name="guestId" value="@guest.Id" />
-                                                    <input type="hidden" name="tableId" value="" />
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm py-0 px-1" title="Vom Tisch entfernen">×</button>
-                                                </form>
-                                            </li>
+                                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                                @foreach (var guest in table.Guests)
+                                                {
+                                                    <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); padding: 5px 10px; border-radius: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; color: #fff;">
+                                                        <span>@guest.Name <span style="color: #aaa; font-size: 0.75rem;">(@guest.NumberOfGuests P.)</span></span>
+                                                        <form asp-action="AssignGuestToTable" method="post" style="margin: 0; display: inline;">
+                                                            <input type="hidden" name="guestId" value="@guest.Id" />
+                                                            <input type="hidden" name="tableId" value="" />
+                                                            <button type="submit" title="Vom Tisch entfernen" style="background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.9rem; padding: 0; line-height: 1;">×</button>
+                                                        </form>
+                                                    </div>
+                                                }
+                                            </div>
                                         }
-                                    </ul>
-                                }
-                                else
-                                {
-                                    <p class="text-muted small mb-0">Noch keine Gäste zugewiesen.</p>
-                                }
+                                        else
+                                        {
+                                            <p style="color: #64748b; font-size: 0.85rem; font-style: italic; margin: 5px 0;">Noch keine Gäste zugewiesen.</p>
+                                        }
+                                    </div>
+                                </div>
+
                             </div>
-                        </div>
+                        }
                     </div>
-                }
+                </div>
+
             </div>
         </div>
     </div>
-</div>
+
+</body>
+</html>
