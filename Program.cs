@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
 using System;
+using Microsoft.AspNetCore.HttpOverrides;
 
 Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
@@ -19,43 +20,31 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // MVC + Razor Views
 builder.Services.AddControllersWithViews();
 
-// Session aktivieren
+// Session aktivieren & Cookie-Sicherheit für Render-Proxy anpassen
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
 
 var app = builder.Build();
 
-// Datenbank automatisch migrieren beim Start mit Fehler-Logging (fängt den Absturz ab)
-//using (var scope = app.Services.CreateScope())
-//{
-    //var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    //try
-    //{
-    //    dbContext.Database.Migrate();
-    //}
-    //catch (Exception ex)
-    //{
-      //  Console.WriteLine("KRITISCHER FEHLER BEI DER MIGRATION: " + ex.ToString());
-    //    throw;
-    //}
-//}
-
-// Middleware
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/Home/Error");
-//}
+// WICHTIG: Forwarded Headers für Render aktivieren, damit HTTPS und IP-Adressen korrekt durchgereicht werden
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseSession();
+
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
