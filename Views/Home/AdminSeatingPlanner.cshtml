@@ -3,9 +3,7 @@
 @{
     ViewData["Title"] = "Sitzplan-Verwaltung";
     var attendingGuests = ViewBag.AttendingGuests as List<TooTheMoon.Models.RsvpGuest> ?? new List<TooTheMoon.Models.RsvpGuest>();
-    // Alle Gäste, die bereits einem Tisch zugewiesen sind
     var assignedGuestIds = Model.SelectMany(t => t.Guests).Select(g => g.Id).ToHashSet();
-    // Gäste, die zugesagt haben, aber noch keinen Tisch haben
     var unassignedGuests = attendingGuests.Where(g => !assignedGuestIds.Contains(g.Id)).ToList();
 }
 
@@ -42,7 +40,7 @@
                 </div>
                 <div class="card-body p-2" style="max-height: 450px; overflow-y: auto;">
                     @if (!unassignedGuests.Any())
-                    -                    {
+                    {
                         <p class="text-muted text-center my-3">Alle zugesagten Gäste haben einen Platz! 🎉</p>
                     }
                     else
@@ -52,7 +50,7 @@
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center py-2">
                                     <span>@guest.Name</span>
-                                    <span class="badge bg-info text-dark">@(guest.PlusOne == true ? "+1" : "Einzel")</span>
+                                    <span class="badge bg-info text-dark">@guest.NumberOfGuests Pers.</span>
                                 </li>
                             }
                         </ul>
@@ -101,11 +99,11 @@
                                         <ul class="list-group list-group-flush mb-3">
                                             @foreach (var guest in table.Guests)
                                             {
-                                                <li class="list-group-Item d-flex justify-content-between align-items-center px-0 py-1">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-1">
                                                     <span class="small">@guest.Name</span>
                                                     <form asp-action="AssignGuestToTable" method="post" class="d-inline">
                                                         <input type="hidden" name="guestId" value="@guest.Id" />
-                                                        <input type="hidden" name="tableId" value="" /> <!-- Null to unassign -->
+                                                        <input type="hidden" name="tableId" value="" />
                                                         <button type="submit" class="btn btn-sm btn-outline-secondary py-0 px-1" style="font-size: 0.75rem;" title="Vom Tisch entfernen">Entfernen</button>
                                                     </form>
                                                 </li>
@@ -123,7 +121,7 @@
                                                     <option value="">Gast zuweisen...</option>
                                                     @foreach (var guest in unassignedGuests)
                                                     {
-                                                        <option value="@guest.Id">@guest.Name</option>
+                                                        <option value="@guest.Id">@guest.Name (@guest.NumberOfGuests Pers.)</option>
                                                     }
                                                 </select>
                                                 <button class="btn btn-outline-primary" type="submit">Zuweisen</button>
