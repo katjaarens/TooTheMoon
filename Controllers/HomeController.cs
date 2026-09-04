@@ -107,7 +107,7 @@ public class HomeController : Controller
             CreatedAt = DateTime.UtcNow
         };
 
-        // In die SQLite-Datenbank schreiben
+        // In die Datenbank schreiben
         _context.RsvpGuests.Add(guest);
         await _context.SaveChangesAsync();
         
@@ -129,7 +129,7 @@ public class HomeController : Controller
         var allowedNames = new[] { "Andrea", "Katja", "Heike", "Lulu" };
 
         bool isValidName = allowedNames.Any(n => n.Equals(name?.Trim(), StringComparison.OrdinalIgnoreCase));
-        string correctPassword = "ToTheMoon2027!"; // Hier euer gemeinsames Passwort
+        string correctPassword = "ToTheMoon2027!"; // Euer gemeinsames Passwort
 
         if (isValidName && passcode == correctPassword)
         {
@@ -153,6 +153,7 @@ public class HomeController : Controller
         var guests = await _context.RsvpGuests.OrderByDescending(g => g.CreatedAt).ToListAsync();
         return View(guests);
     }
+
     // --- Gast löschen ---
     [HttpPost]
     public async Task<IActionResult> DeleteGuest(int id)
@@ -172,14 +173,97 @@ public class HomeController : Controller
         return RedirectToAction("AdminGuests");
     }
 
+    // --- Sitzplan-Verwaltung ---
+    [HttpGet]
+    public async Task<IActionResult> AdminSeatingPlanner()
+    {
+        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        {
+            return RedirectToAction("AdminLogin");
+        }
+
+        var tables = await _context.WeddingTables
+            .Include(t => t.Guests)
+            .ToListAsync();
+
+        ViewBag.AttendingGuests = await _context.RsvpGuests
+            .Where(g => g.IsAttending)
+            .ToListAsync();
+
+        return View(tables);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddTable(string tableName, int capacity)
+    {
+        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        {
+            return RedirectToAction("AdminLogin");
+        }
+
+        if (!string.IsNullOrWhiteSpace(tableName))
+        {
+            var table = new WeddingTable
+            {
+                Name = tableName.Trim(),
+                Capacity = capacity > 0 ? capacity : 8
+            };
+            _context.WeddingTables.Add(table);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("AdminSeatingPlanner");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteTable(int id)
+    {
+        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        {
+            return RedirectToAction("AdminLogin");
+        }
+
+        var table = await _context.WeddingTables
+            .Include(t => t.Guests)
+            .FirstOrDefaultAsync(t => t.Id == id);
+
+        if (table != null)
+        {
+            foreach (var guest in table.Guests)
+            {
+                guest.WeddingTableId = null;
+            }
+
+            _context.WeddingTables.Remove(table);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("AdminSeatingPlanner");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AssignGuestToTable(int guestId, int? tableId)
+    {
+        if (HttpContext.Session.GetString("IsAdmin") != "True")
+        {
+            return RedirectToAction("AdminLogin");
+        }
+
+        var guest = await _context.RsvpGuests.FindAsync(guestId);
+        if (guest != null)
+        {
+            guest.WeddingTableId = (tableId.HasValue && tableId.Value > 0) ? tableId.Value : (int?)null;
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToAction("AdminSeatingPlanner");
+    }
+
     // --- Logout ---
     [HttpPost]
     public IActionResult Logout()
     {
-        // Session komplett leeren
         HttpContext.Session.Clear();
-        
-        // Zurück zur Admin-Login-Seite umleiten
         return RedirectToAction("AdminLogin");
     }
 
