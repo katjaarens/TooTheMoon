@@ -173,7 +173,7 @@ public class HomeController : Controller
         return RedirectToAction("AdminGuests");
     }
 
-    // --- Sitzplan-Verwaltung ---
+    // --- Sitzplan-Verwaltung (Timeout-optimiert) ---
     [HttpGet]
     public async Task<IActionResult> AdminSeatingPlanner()
     {
@@ -182,13 +182,16 @@ public class HomeController : Controller
             return RedirectToAction("AdminLogin");
         }
 
-        var tables = await _context.WeddingTables
-            .Include(t => t.Guests)
-            .ToListAsync();
+        // Getrennte, schnelle Abfragen statt schwerer Joins
+        var tables = await _context.WeddingTables.ToListAsync();
+        var allGuests = await _context.RsvpGuests.ToListAsync();
 
-        ViewBag.AttendingGuests = await _context.RsvpGuests
-            .Where(g => g.IsAttending)
-            .ToListAsync();
+        ViewBag.AttendingGuests = allGuests.Where(g => g.IsAttending).ToList();
+
+        foreach (var table in tables)
+        {
+            table.Guests = allGuests.Where(g => g.WeddingTableId == table.Id).ToList();
+        }
 
         return View(tables);
     }
