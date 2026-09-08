@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TooTheMoon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+44a9bab8a0bd624fa538aaa0595139ee403c4176")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+10c78165eeb72f9799d46ce0f2340c8657cd6dd7")]
 [assembly: System.Reflection.AssemblyProductAttribute("TooTheMoon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TooTheMoon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
