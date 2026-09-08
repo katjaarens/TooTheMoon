@@ -28,7 +28,7 @@ public class AppDbContext : DbContext
             .HasForeignKey(g => g.WeddingTableId)
             .OnDelete(DeleteBehavior.SetNull);
 
-       modelBuilder.Entity<Groomsmaid>()
+       mmodelBuilder.Entity<Groomsmaid>()
             .ToTable("groomsmaids")
             .Property(g => g.Id)
             .HasColumnName("id")
@@ -38,10 +38,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Groomsmaid>().Property(g => g.Description).HasColumnName("description");
         modelBuilder.Entity<Groomsmaid>().Property(g => g.Phone).HasColumnName("phone");
         modelBuilder.Entity<Groomsmaid>().Property(g => g.ImagePath).HasColumnName("imagepath");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.RoleBadge).HasColumnName("\"RoleBadge\"");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.Anecdote).HasColumnName("\"Anecdote\"");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.FirstImpression).HasColumnName("\"FirstImpression\"");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.SinceWhen).HasColumnName("\"SinceWhen\"");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.Speciality).HasColumnName("\"Speciality\"");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.RoleBadge).HasColumnName("rolebadge");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.Anecdote).HasColumnName("anecdote");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.FirstImpression).HasColumnName("firstimpression");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.SinceWhen).HasColumnName("sincewhen");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.Speciality).HasColumnName("speciality");
     }
 }
