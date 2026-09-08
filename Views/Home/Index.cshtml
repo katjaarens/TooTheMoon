@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<TooTheMoon.Models.Groomsmaid>
+
+@{
     ViewData["Title"] = "Andrea & Katja – Unsere Hochzeit";
     Layout = null;
 }
@@ -106,7 +108,7 @@
                     Lade Countdown...
                 </div>
 
-                <div class="wedding-date">14. August 2027</div>
+                <div class="wedding-date">05. August 2028</div>
                 <div class="wedding-location">Königshof Erwitte & Sprikeltrix</div>
 
                 <a href="#rsvp" class="btn-glow">Jetzt zusagen</a>
@@ -165,7 +167,7 @@
     <section id="schedule">
         <div class="glass-panel content-box">
             <h2 class="section-title">Ablauf des Tages</h2>
-            <div class="section-subtitle">14. August 2027 – Königshof Erwitte & Sprikeltrix</div>
+            <div class="section-subtitle">05. August 2028 – Königshof Erwitte & Sprikeltrix</div>
 
             <div class="timeline">
                 <div class="timeline-item">
@@ -307,6 +309,51 @@
                         </div>
                     </div>
                 </div>
+                <!-- TRAUZEUGEN BEREICH -->
+    <section id="witnesses" class="content-section">
+        <div class="glass-panel content-box">
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 class="section-title" style="margin-bottom: 10px;">Unsere Trauzeugen</h2>
+                <div class="section-subtitle">„Unsere Co-Pilotinnen für die Reise zum Mond und zurück. Kontaktiert sie für geheime Missionen:“</div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 10px;">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var person in Model)
+                    {
+                        <div style="flex: 1; min-width: 300px; max-width: 400px;">
+                            <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 30px; height: 100%; text-align: center;">
+                                
+                                <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px auto; overflow: hidden; border: 2px solid rgba(244, 114, 182, 0.5);">
+                                    <img src="@person.ImagePath" alt="@person.Name" style="width: 100%; height: 100%; object-fit: cover;" />
+                                </div>
+
+                                <h3 style="font-family: 'Playfair Display', serif; color: #ffffff; font-size: 1.4rem; margin-bottom: 5px;">@person.Name</h3>
+                                <span style="color: #f472b6; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 15px; font-weight: bold;">@person.RoleBadge</span>
+                                
+                                <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+                                    @person.Anecdote
+                                </p>
+
+                                <div style="margin-top: 15px; background: rgba(244, 114, 182, 0.15); padding: 10px 20px; border-radius: 25px; display: inline-block; border: 1px solid rgba(244, 114, 182, 0.3);">
+                                    <span style="color: #ff9cf2 !important; font-size: 1.1rem; font-weight: bold;">
+                                        ⭐ @person.FirstImpression
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p class="text-center text-muted">Keine Trauzeugen-Daten in der Datenbank gefunden.</p>
+                }
+            </div>
+
+        </div>
+    </section>
 
             </div>
 
@@ -315,6 +362,7 @@
                 <h2 class="section-title" style="margin-bottom: 10px;">Unsere Trauzeugen</h2>
                 <div class="section-subtitle">„Unsere Co-Pilotinnen für die Reise zum Mond und zurück. Kontaktiert sie für geheime Missionen:“</div>
             </div>
+            
 
         </div>
     </section>
@@ -469,7 +517,7 @@
             }, 800);
         }
 
-        const weddingDate = new Date("August 14, 2027 13:30:00").getTime();
+        const weddingDate = new Date("August 05, 2028 13:30:00").getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();
