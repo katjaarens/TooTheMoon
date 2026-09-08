@@ -5,7 +5,8 @@ namespace TooTheMoon.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
     {
     }
 
@@ -28,20 +29,42 @@ public class AppDbContext : DbContext
             .HasForeignKey(g => g.WeddingTableId)
             .OnDelete(DeleteBehavior.SetNull);
 
-       modelBuilder.Entity<Groomsmaid>()
-            .ToTable("groomsmaids")
-            .Property(g => g.Id)
-            .HasColumnName("id")
-            .UseIdentityByDefaultColumn();
+        modelBuilder.Entity<Groomsmaid>(entity =>
+        {
+            entity.ToTable("groomsmaids", "public");
 
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.Name).HasColumnName("name");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.Description).HasColumnName("description");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.Phone).HasColumnName("phone");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.ImagePath).HasColumnName("imagepath");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.RoleBadge).HasColumnName("rolebadge");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.Anecdote).HasColumnName("anecdote");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.FirstImpression).HasColumnName("firstimpression");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.SinceWhen).HasColumnName("sincewhen");
-        modelBuilder.Entity<Groomsmaid>().Property(g => g.Speciality).HasColumnName("speciality");
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id")
+                .UseIdentityByDefaultColumn();
+
+            entity.Property(e => e.Name)
+                .HasColumnName("Name");
+
+            entity.Property(e => e.Description)
+                .HasColumnName("Description");
+
+            entity.Property(e => e.Phone)
+                .HasColumnName("Phone");
+
+            entity.Property(e => e.ImagePath)
+                .HasColumnName("ImagePath");
+
+            entity.Property(e => e.RoleBadge)
+                .HasColumnName("rolebadge");
+
+            entity.Property(e => e.Anecdote)
+                .HasColumnName("anecdote");
+
+            entity.Property(e => e.FirstImpression)
+                .HasColumnName("firstimpression");
+
+            entity.Property(e => e.SinceWhen)
+                .HasColumnName("sincewhen");
+
+            entity.Property(e => e.Speciality)
+                .HasColumnName("speciality");
+        });
     }
 }
