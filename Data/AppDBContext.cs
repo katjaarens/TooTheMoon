@@ -28,7 +28,7 @@ public class AppDbContext : DbContext
             .HasForeignKey(g => g.WeddingTableId)
             .OnDelete(DeleteBehavior.SetNull);
 
-       mmodelBuilder.Entity<Groomsmaid>()
+       modelBuilder.Entity<Groomsmaid>()
             .ToTable("groomsmaids")
             .Property(g => g.Id)
             .HasColumnName("id")
