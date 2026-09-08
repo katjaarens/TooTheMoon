@@ -40,5 +40,20 @@ public class AppDbContext : DbContext
             .Property(g => g.Id)
             .HasColumnName("id")
             .UseIdentityByDefaultColumn();
+
+            modelBuilder.Entity<Groomsmaid>()
+            .ToTable("groomsmaids")
+            .Property(g => g.Id)
+            .HasColumnName("id")
+            .UseIdentityByDefaultColumn();
+
+        // Mappe hier alle weiteren Spalten explizit auf ihre Kleinbuchstaben-Pendants in Postgres:
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.Anecdote).HasColumnName("anecdote");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.FirstImpression).HasColumnName("firstimpression");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.ImagePath).HasColumnName("imagepath");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.Name).HasColumnName("name");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.RoleBadge).HasColumnName("rolebadge");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.SinceWhen).HasColumnName("sincewhen");
+        modelBuilder.Entity<Groomsmaid>().Property(g => g.Speciality).HasColumnName("speciality");
     }
 }
