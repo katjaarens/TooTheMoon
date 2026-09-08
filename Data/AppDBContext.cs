@@ -34,11 +34,11 @@ public class AppDbContext : DbContext
             .Property(g => g.Id)
             .UseIdentityByDefaultColumn();
 
-            // Konfiguration für Groomsmaids (Trauzeugen)
+        // Konfiguration für Groomsmaids (Trauzeugen)
         modelBuilder.Entity<Groomsmaid>()
-            .ToTable("Groomsmaids")
+            .ToTable("groomsmaids")
             .Property(g => g.Id)
-            .HasColumnName("Id") // Falls die Spalte in Postgres kleingeschrieben ist, hier anpassen (z.B. "id")
+            .HasColumnName("id")
             .UseIdentityByDefaultColumn();
     }
 }
