@@ -11,7 +11,7 @@ public class AppDbContext : DbContext
 
     public DbSet<RsvpGuest> RsvpGuests => Set<RsvpGuest>();
     public DbSet<WeddingTable> WeddingTables => Set<WeddingTable>();
-    public DbSet<Groomsmaids> Groomsmaids => Set<Groomsmaids>(); // Hinzugefügt
+    public DbSet<Groomsmaid> Groomsmaids => Set<Groomsmaid>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
