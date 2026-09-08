@@ -18,9 +18,13 @@ public class HomeController : Controller
         _context = context;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var witnesses = await _context.Witnesses
+            .AsNoTracking()
+            .ToListAsync();
+
+        return View(witnesses);
     }
 
     public IActionResult Privacy()
@@ -29,11 +33,6 @@ public class HomeController : Controller
     }
 
     public IActionResult RsvpForm()
-    {
-        return View();
-    }
-
-    public IActionResult Trauzeugen()
     {
         return View();
     }
@@ -213,21 +212,13 @@ public class HomeController : Controller
 
         try
         {
-            Console.WriteLine("AdminSeatingPlanner gestartet");
-
-            Console.WriteLine("Lade WeddingTables...");
             var tables = await _context.WeddingTables
                 .AsNoTracking()
                 .ToListAsync();
 
-            Console.WriteLine($"Tische geladen: {tables.Count}");
-
-            Console.WriteLine("Lade RsvpGuests...");
             var allGuests = await _context.RsvpGuests
                 .AsNoTracking()
                 .ToListAsync();
-
-            Console.WriteLine($"Gäste geladen: {allGuests.Count}");
 
             ViewBag.AttendingGuests = allGuests
                 .Where(g => g.IsAttending)
@@ -240,15 +231,10 @@ public class HomeController : Controller
                     .ToList();
             }
 
-            Console.WriteLine("View wird geladen");
-
             return View(tables);
         }
         catch (Exception ex)
         {
-            Console.WriteLine("FEHLER IM SITZPLAN:");
-            Console.WriteLine(ex.ToString());
-
             return StatusCode(500, ex.ToString());
         }
     }
