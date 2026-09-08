@@ -13,8 +13,6 @@ public class AppDbContext : DbContext
     public DbSet<WeddingTable> WeddingTables => Set<WeddingTable>();
     public DbSet<Groomsmaid> Groomsmaids => Set<Groomsmaid>();
 
-    public DbSet<Witness> Witnesses { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -30,7 +28,7 @@ public class AppDbContext : DbContext
             .HasForeignKey(g => g.WeddingTableId)
             .OnDelete(DeleteBehavior.SetNull);
 
-        // Konfiguration für Trauzeugen
+        // Konfiguration für Trauzeugen / Groomsmaids
         modelBuilder.Entity<Groomsmaid>()
             .ToTable("Groomsmaids")
             .Property(g => g.Id)

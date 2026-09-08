@@ -20,11 +20,11 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var witnesses = await _context.Witnesses
+        var groomsmaids = await _context.Groomsmaids
             .AsNoTracking()
             .ToListAsync();
 
-        return View(witnesses);
+        return View(groomsmaids);
     }
 
     public IActionResult Privacy()
