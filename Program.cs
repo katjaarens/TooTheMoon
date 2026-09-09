@@ -13,9 +13,12 @@ Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Render-Port-Zuweisung dynamisch übernehmen (behebt das Timeout)
+// Render-Port-Zuweisung über Kestrel erzwingen, damit der Port-Scan nicht fehlschlägt
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://+:{port}");
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(int.Parse(port));
+});
 
 // Datenbank (mit PostgreSQL / Npgsql für Supabase)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
