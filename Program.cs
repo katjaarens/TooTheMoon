@@ -11,11 +11,11 @@ using Microsoft.AspNetCore.DataProtection;
 
 Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Render-Port-Zuweisung fehlerfrei für .NET 8 übernehmen
+// Render-Port abfangen und Kestrel über die ASPNETCORE_URLS Variable steuern
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+Environment.SetEnvironmentVariable("ASPNETCORE_URLS", $"http://+:{port}");
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Datenbank (mit PostgreSQL / Npgsql für Supabase)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
