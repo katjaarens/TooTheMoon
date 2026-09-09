@@ -512,4 +512,151 @@ select option { background: #111827; color: #ffffff; }
     .love-item { width: 100%; padding-left: 45px; padding-right: 15px; text-align: left !important; }
     .love-item.right { left: 0; }
     .love-item.left::after, .love-item.right::after { left: 13px; right: auto; }
+
+    /* Geschenke-Sektion & Infoboxen */
+.gift-box, .info-box {
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.gift-icon-wrap, .info-icon-wrap {
+    width: 60px; height: 60px;
+    background: rgba(224, 169, 159, 0.1);
+    border: 1px solid rgba(224, 169, 159, 0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px auto;
+    font-size: 24px;
+    box-shadow: 0 0 20px rgba(224, 169, 159, 0.2);
+}
+
+.gift-text, .info-text {
+    font-size: 14px;
+    color: #9ca3af;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+/* Anfahrt & Hotels (Grid-Ansicht) */
+.location-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.location-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.location-card:hover {
+    border-color: rgba(224, 169, 159, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.location-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.location-card p {
+    font-size: 13px;
+    color: #9ca3af;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.link-subtle {
+    color: #e0a99f;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s ease;
+}
+
+.link-subtle:hover {
+    gap: 10px;
+    color: #ffffff;
+}
+
+/* Dresscode-Hinweis */
+.dresscode-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(224, 169, 159, 0.2);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    color: #e0a99f;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+/* RSVP / Formular-Erfolgsmeldung */
+.form-success-msg {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 14px;
+    display: none;
+}
+
+/* Footer im Cosmic-Look */
+footer {
+    text-align: center;
+    padding: 60px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(to top, rgba(3, 7, 18, 0.95), transparent);
+    position: relative;
+    z-index: 10;
+}
+
+.footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffffff 0%, #e0a99f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+}
+
+.footer-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: #9ca3af;
+    margin: 0;
+}
+
+.footer-moon-icon {
+    font-size: 18px;
+    margin: 15px 0;
+    display: block;
+    color: #e0a99f;
+    opacity: 0.8;
+}
+
+/* Zusätzliche kleine Hilfs-Klassen für fehlerfreie Darstellung */
+.text-center { text-align: center; }
+.mt-20 { margin-top: 20px; }
+.mb-20 { margin-bottom: 20px; }
 }
