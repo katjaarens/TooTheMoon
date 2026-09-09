@@ -13,12 +13,9 @@ Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Render-Port-Zuweisung über Kestrel erzwingen, damit der Port-Scan nicht fehlschlägt
+// Render-Port-Zuweisung fehlerfrei für .NET 8 übernehmen
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(int.Parse(port));
-});
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 // Datenbank (mit PostgreSQL / Npgsql für Supabase)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
