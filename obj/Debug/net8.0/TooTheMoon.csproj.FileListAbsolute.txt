@@ -131,3 +131,10 @@ C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\refint\TooTheMoon.dll
 C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.pdb
 C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\TooTheMoon.genruntimeconfig.cache
 C:\Users\brainyuser\Desktop\TooTheMoon\obj\Debug\net8.0\ref\TooTheMoon.dll
+C:\Users\brainyuser\Desktop\TooTheMoon\bin\Debug\net8.0\publish\web.config
+C:\Users\brainyuser\Desktop\TooTheMoon\bin\Debug\net8.0\publish\appsettings.Development.json
+C:\Users\brainyuser\Desktop\TooTheMoon\bin\Debug\net8.0\publish\appsettings.json
+C:\Users\brainyuser\Desktop\TooTheMoon\bin\Debug\net8.0\publish\TooTheMoon.deps.json
+C:\Users\brainyuser\Desktop\TooTheMoon\bin\Debug\net8.0\publish\TooTheMoon.runtimeconfig.json
+C:\Users\brainyuser\Desktop\TooTheMoon\bin\Debug\net8.0\publish\TooTheMoon.staticwebassets.endpoints.json
+C:\Users\brainyuser\Desktop\TooTheMoon\bin\Debug\net8.0\publish\wwwroot\manifest.json
