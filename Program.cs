@@ -5,13 +5,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using TooTheMoon.Data;
 using System;
-using Microsoft.AspNetCore.Http; // <--- Das hat gefehlt!
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.DataProtection;
 
 Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Render-Port-Zuweisung dynamisch übernehmen (behebt das Timeout)
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://+:{port}");
 
 // Datenbank (mit PostgreSQL / Npgsql für Supabase)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
