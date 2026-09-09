@@ -9,9 +9,9 @@ public class Groomsmaid
     public string? Phone { get; set; }
     public string? ImagePath { get; set; }
 
-    public string? rolebadge { get; set; }
-    public string? anecdote { get; set; }
-    public string? firstimpression { get; set; }
-    public string? sincewhen { get; set; }
-    public string? speciality { get; set; }
+    public string? RoleBadge { get; set; }
+    public string? Anecdote { get; set; }
+    public string? FirstImpression { get; set; }
+    public string? SinceWhen { get; set; }
+    public string? Speciality { get; set; }
 }
