@@ -105,6 +105,7 @@
                                         }
                                     </div>
                                     <form asp-action="AssignGuestToTable" method="post" style="margin: 0;">
+                                        @Html.AntiForgeryToken()
                                         <input type="hidden" name="guestId" value="@guest.Id" />
                                         <select name="tableId" onchange="this.form.submit()" style="background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 4px 6px; border-radius: 6px; font-size: 0.8rem;">
                                             <option value="">Tisch...</option>
@@ -199,6 +200,11 @@
         </div>
     </div>
 
+    <!-- Unsichtbares Formular zur sicheren Bereitstellung des Anti-Forgery-Tokens für JavaScript -->
+    <form id="hidden-token-form" style="display:none;">
+        @Html.AntiForgeryToken()
+    </form>
+
     <!-- Drag & Drop JavaScript -->
     <script>
         function allowDrop(ev) {
@@ -229,8 +235,8 @@
             form.method = 'post';
             form.action = '/Home/AssignGuestToTable';
 
-            // Anti-Forgery-Token aus einem bestehenden Formular im Dokument holen falls vorhanden
-            let tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
+            // Anti-Forgery-Token aus dem versteckten Formular holen
+            let tokenInput = document.querySelector('#hidden-token-form input[name="__RequestVerificationToken"]');
             if (tokenInput) {
                 let tokenClone = tokenInput.cloneNode(true);
                 form.appendChild(tokenClone);
