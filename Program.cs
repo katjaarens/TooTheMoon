@@ -1,64 +1,112 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using TooTheMoon.Data;
 using System;
+using System.IO;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.DataProtection;
-
-Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "1");
-
-// Render-Port abfangen und Kestrel über die ASPNETCORE_URLS Variable steuern
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-Environment.SetEnvironmentVariable("ASPNETCORE_URLS", $"http://+:{port}");
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using TooTheMoon.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Datenbank (mit PostgreSQL / Npgsql für Supabase) und erhöhtem Timeout gegen Cold Starts
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Render-Port verwenden
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+Environment.SetEnvironmentVariable(
+    "ASPNETCORE_URLS",
+    $"http://+:{port}");
+
+// PostgreSQL-Verbindung
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Die ConnectionStrings:DefaultConnection wurde nicht gefunden.");
+}
 
 builder.Services.AddDbContext<AppDbContext>(options =>
+{
     options.UseNpgsql(connectionString, npgsqlOptions =>
     {
-        npgsqlOptions.CommandTimeout(60); // Behebt Timeout-Fehler bei langsamen Cloud-Datenbanken (z.B. Supabase Free Tier)
-    }));
+        npgsqlOptions.CommandTimeout(60);
+        npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null);
+    });
+});
 
-// MVC + Razor Views
+// MVC und Razor Views
 builder.Services.AddControllersWithViews();
 
-// Data Protection absichern, damit Container-Neustarts Cookies nicht ungültig machen
-builder.Services.AddDataProtection()
+// Data-Protection-Schlüssel dauerhaft speichern
+//
+// Auf Render muss /var/data als Persistent Disk eingebunden sein.
+var dataProtectionKeysPath = "/var/data/dataprotection-keys";
+
+Directory.CreateDirectory(dataProtectionKeysPath);
+
+builder.Services
+    .AddDataProtection()
+    .PersistKeysToFileSystem(
+        new DirectoryInfo(dataProtectionKeysPath))
     .SetApplicationName("TooTheMoonWeddingApp");
 
-// Session aktivieren & Cookie-Sicherheit für Render-Proxy anpassen
+// Session-Speicher
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
+    options.Cookie.Name = ".TooTheMoon.Session.v2";
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+
+    // Render verwendet einen HTTPS-Proxy.
+    // SameAsRequest funktioniert zusammen mit ForwardedHeaders.
+    options.Cookie.SecurePolicy =
+        CookieSecurePolicy.SameAsRequest;
+
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
+
+// Optional: Falls später Login/Auth verwendet wird
+// builder.Services.AddAuthentication(...);
 
 var app = builder.Build();
 
-// WICHTIG: Forwarded Headers für Render aktivieren, damit HTTPS korrekt erkannt wird
-app.UseForwardedHeaders(new ForwardedHeadersOptions
+// Render-Proxy korrekt berücksichtigen
+var forwardedHeadersOptions = new ForwardedHeadersOptions
 {
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+    ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor |
+        ForwardedHeaders.XForwardedProto
+};
 
+// Proxy-Netzwerke zulassen
+forwardedHeadersOptions.KnownNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+
+app.UseForwardedHeaders(forwardedHeadersOptions);
+
+// Statische Dateien wie CSS, JavaScript und Bilder
 app.UseStaticFiles();
 
+// Routing
 app.UseRouting();
 
+// Session muss nach UseRouting und vor den Controllern aktiviert werden
 app.UseSession();
+
+// Falls Authentifizierung verwendet wird, sollte diese Zeile
+// vor UseAuthorization() stehen:
+// app.UseAuthentication();
 
 app.UseAuthorization();
 
+// Standardroute
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
