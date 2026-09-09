@@ -8,7 +8,7 @@ body, html {
     padding: 0;
     width: 100%;
     font-family: 'Inter', sans-serif;
-    background-color: #ffffff;
+    background-color: #030712;
     color: #f3f4f6;
     overflow-x: hidden;
 }
@@ -73,6 +73,36 @@ body, html {
     }
 }
 
+/* Aurora Hintergrund-Effekt */
+.aurora-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: #030712;
+    overflow: hidden;
+}
+
+.aurora-blob {
+    position: absolute;
+    filter: blur(80px);
+    opacity: 0.45;
+    animation: floatBlob 15s ease-in-out infinite alternate;
+}
+
+.blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #4f46e5 0%, rgba(79, 70, 229, 0) 70%); }
+.blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #db2777 0%, rgba(219, 39, 119, 0) 70%); animation-delay: -5s; }
+.blob-3 { top: 40%; left: 30%; width: 40vw; height: 40vw; background: radial-gradient(circle, #0d9488 0%, rgba(13, 148, 136, 0) 70%); animation-delay: -10s; }
+
+@keyframes floatBlob {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, -40px) scale(1.1); }
+    100% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+/* Intro-Overlay / Mond-Portal Curtain */
 .curtain-overlay {
     position: fixed;
     top: 0;
@@ -216,34 +246,7 @@ body, html {
     50% { opacity: 1; }
 }
 
-.aurora-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    background: #030712;
-    overflow: hidden;
-}
-
-.aurora-blob {
-    position: absolute;
-    filter: blur(80px);
-    opacity: 0.45;
-    animation: floatBlob 15s ease-in-out infinite alternate;
-}
-
-.blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #4f46e5 0%, rgba(79, 70, 229, 0) 70%); }
-.blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #db2777 0%, rgba(219, 39, 119, 0) 70%); animation-delay: -5s; }
-.blob-3 { top: 40%; left: 30%; width: 40vw; height: 40vw; background: radial-gradient(circle, #0d9488 0%, rgba(13, 148, 136, 0) 70%); animation-delay: -10s; }
-
-@keyframes floatBlob {
-    0% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(30px, -40px) scale(1.1); }
-    100% { transform: translate(-20px, 30px) scale(0.95); }
-}
-
+/* Gläserner UI-Standard */
 .glass-panel {
     background: rgba(17, 24, 39, 0.65);
     backdrop-filter: blur(16px);
@@ -253,6 +256,7 @@ body, html {
     border-radius: 24px;
 }
 
+/* Header & Navigation */
 header {
     position: fixed;
     top: 20px;
@@ -294,6 +298,7 @@ nav a {
 
 nav a:hover { color: #f472b6; }
 
+/* Sektionen */
 section {
     min-height: 100vh;
     padding: 140px 20px 80px 20px;
@@ -303,6 +308,7 @@ section {
     align-items: center;
 }
 
+/* Hero Card & Inhalt */
 .hero-card {
     display: flex;
     flex-direction: row;
@@ -443,6 +449,7 @@ h1 {
     box-shadow: 0 12px 30px rgba(219, 39, 119, 0.6);
 }
 
+/* Allgemeine Inhaltsboxen & Sektionstitel */
 .content-box {
     width: 100%;
     max-width: 800px;
@@ -468,6 +475,7 @@ h1 {
     margin-bottom: 40px;
 }
 
+/* Timeline / Ablauf */
 .timeline {
     position: relative;
     padding-left: 35px;
@@ -518,6 +526,7 @@ h1 {
     line-height: 1.6;
 }
 
+/* Trauzeugen Grid */
 .witnesses-grid {
     display: flex;
     gap: 40px;
@@ -585,6 +594,7 @@ h1 {
     box-shadow: 0 4px 10px rgba(219, 39, 119, 0.4);
 }
 
+/* Formulare / Zusage */
 .form-group { margin-bottom: 20px; }
 .form-label { display: block; font-size: 12px; font-weight: 600; color: #d1d5db; margin-bottom: 6px; letter-spacing: 0.5px; }
 .attendance-options { display: flex; gap: 12px; margin-bottom: 20px; }
@@ -612,7 +622,7 @@ select option { background: #111827; color: #ffffff; }
 .checkbox-label { display: flex; align-items: center; gap: 10px; cursor: pointer; color: #9ca3af; font-size: 13px; margin-bottom: 20px; }
 .checkbox-label input[type="checkbox"] { accent-color: #f472b6; width: 16px; height: 16px; }
 
-/* Zeitstrahl (Story) */
+/* Zeitstrahl (Love Story) */
 .story-container {
     max-width: 900px !important;
 }
@@ -777,7 +787,7 @@ select option { background: #111827; color: #ffffff; }
     padding: 0 20px 20px 20px;
 }
 
-/* Musik-Player */
+/* Musik-Player Button */
 .music-player-bar {
     position: fixed;
     top: 20px;
@@ -838,7 +848,7 @@ select option { background: #111827; color: #ffffff; }
     line-height: 1.6;
 }
 
-/* Responsive Anpassungen */
+/* Responsive Anpassungen für Mobilgeräte */
 @media (max-width: 768px) {
     .hero-card { flex-direction: column; max-width: 450px; }
     header { width: 92%; padding: 12px 20px; }
