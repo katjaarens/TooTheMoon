@@ -37,9 +37,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
         npgsqlOptions.EnableRetryOnFailure(
             maxRetryCount: 5,
-            maxRetryDelay: TimeSpan.FromSeconds(10));
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorCodesToAdd: null);
     });
 });
+
 
 // MVC und Razor Views
 builder.Services.AddControllersWithViews();
