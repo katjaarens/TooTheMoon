@@ -354,16 +354,24 @@ h1 {
 .wedding-location { font-size: 13px; color: #9ca3af; margin-bottom: 25px; }
 
 .btn-glow {
-    background: linear-gradient(135deg, #312e81 0%, #9f1239 100%);
-    color: #ffffff; font-size: 13px; font-weight: 600;
-    padding: 14px 32px; border-radius: 30px; text-decoration: none;
-    box-shadow: 0 8px 25px rgba(159, 18, 57, 0.4);
-    transition: all 0.3s ease; border: none; cursor: pointer; letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #312e81 0%, #e0a99f 100%);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 14px 32px;
+    border-radius: 30px;
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(224, 169, 159, 0.35);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(224, 169, 159, 0.4);
+    cursor: pointer;
+    letter-spacing: 0.5px;
 }
 
 .btn-glow:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(159, 18, 57, 0.6);
+    box-shadow: 0 12px 30px rgba(224, 169, 159, 0.6);
+    border-color: rgba(224, 169, 159, 0.8);
 }
 
 /* Inhaltsboxen & Sektionen */
