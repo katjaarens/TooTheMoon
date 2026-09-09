@@ -258,49 +258,68 @@
     </section>
 
    <!-- Trauzeugen Sektion -->
-    <section id="witnesses" class="content-section">
-        <div class="glass-panel content-box">
-            
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h2 class="section-title" style="margin-bottom: 10px;">Unsere Trauzeugen</h2>
-                <div class="section-subtitle">„Unsere Co-Pilotinnen für die Reise zum Mond und zurück. Kontaktiert sie für geheime Missionen:“</div>
-            </div>
-
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 10px;">
-                @if (Model != null && Model.Any())
-                {
-                    @foreach (var person in Model)
-                    {
-                        <div style="flex: 1; min-width: 300px; max-width: 400px;">
-                            <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 30px; height: 100%; text-align: center;">
-                                
-                                <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px auto; overflow: hidden; border: 2px solid rgba(244, 114, 182, 0.5);">
-                                    <img src="@person.ImagePath" alt="@person.Name" style="width: 100%; height: 100%; object-fit: cover;" />
-                                </div>
-
-                                <h3 style="font-family: 'Playfair Display', serif; color: #ffffff; font-size: 1.4rem; margin-bottom: 5px;">@person.Name</h3>
-                                <span style="color: #f472b6; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 15px; font-weight: bold;">@person.RoleBadge</span>
-                                
-                                <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
-                                    @person.Anecdote
-                                </p>
-
-                                <div style="margin-top: 15px; background: rgba(244, 114, 182, 0.15); padding: 10px 20px; border-radius: 25px; display: inline-block; border: 1px solid rgba(244, 114, 182, 0.3);">
-                                    <a href="tel:@person.FirstImpression" style="color: #ff9cf2 !important; text-decoration: none; font-size: 1.1rem; font-weight: bold;">
-                                        📞 @person.FirstImpression
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <p class="text-center text-muted">Keine Trauzeugen-Daten in der Datenbank gefunden.</p>
-                }
-            </div>
-
+<section id="witnesses" class="content-section">
+    <div class="glass-panel content-box">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 class="section-title" style="margin-bottom: 10px;">Unsere Trauzeugen</h2>
+            <div class="section-subtitle">„Unsere Co-Pilotinnen für die Reise zum Mond und zurück. Kontaktiert sie für geheime Missionen:“</div>
         </div>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 10px;">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var person in Model)
+                {
+                    <div style="flex: 1; min-width: 300px; max-width: 400px;">
+                        <div style="background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 30px; height: 100%; text-align: center;">
+                            
+                            <!-- Bild -->
+                            <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px auto; overflow: hidden; border: 2px solid rgba(244, 114, 182, 0.5);">
+                                <img src="@person.ImagePath" alt="@person.Name" style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+
+                            <!-- Name -->
+                            <h3 style="font-family: 'Playfair Display', serif; color: #ffffff; font-size: 1.4rem; margin-bottom: 5px;">@person.Name</h3>
+
+                            <!-- Rolle -->
+                            <span style="color: #f472b6; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 15px; font-weight: bold;">
+                                @person.rolebadge
+                            </span>
+
+                            <!-- Beschreibung -->
+                            <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+                                @person.Description
+                            </p>
+
+                            <!-- Details -->
+                            <div style="text-align: left; color: #e2e8f0; font-size: 0.9rem; margin-bottom: 20px;">
+                                <p><strong>Anekdote:</strong> @person.anecdote</p>
+                                <p><strong>Erster Eindruck:</strong> @person.firstimpression</p>
+                                <p><strong>Seit wann:</strong> @person.sincewhen</p>
+                                <p><strong>Speciality:</strong> @person.speciality</p>
+                            </div>
+
+                            <!-- Telefon -->
+                            <div style="margin-top: 15px; background: rgba(244, 114, 182, 0.15); padding: 10px 20px; border-radius: 25px; display: inline-block; border: 1px solid rgba(244, 114, 182, 0.3);">
+                                <a href="tel:@person.Phone" style="color: #ff9cf2 !important; text-decoration: none; font-size: 1.1rem; font-weight: bold;">
+                                    📞 @person.Phone
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-center text-muted">Keine Trauzeugen-Daten in der Datenbank gefunden.</p>
+            }
+        </div>
+
+    </div>
+</section>
+
     </section>
             </div>
 
