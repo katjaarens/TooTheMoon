@@ -1,3 +1,5 @@
+namespace TooTheMoon.Models;
+
 public class Groomsmaid
 {
     public long Id { get; set; }
