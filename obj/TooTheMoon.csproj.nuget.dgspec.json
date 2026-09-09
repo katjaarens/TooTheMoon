@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj": {}
+    "C:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj": {}
   },
   "projects": {
-    "c:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj": {
+    "C:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj",
+        "projectUniqueName": "C:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj",
         "projectName": "TooTheMoon",
-        "projectPath": "c:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj",
+        "projectPath": "C:\\Users\\brainyuser\\Desktop\\TooTheMoon\\TooTheMoon.csproj",
         "packagesPath": "C:\\Users\\brainyuser\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\brainyuser\\Desktop\\TooTheMoon\\obj\\",
+        "outputPath": "C:\\Users\\brainyuser\\Desktop\\TooTheMoon\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
