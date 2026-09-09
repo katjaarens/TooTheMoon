@@ -17,11 +17,14 @@ Environment.SetEnvironmentVariable("ASPNETCORE_URLS", $"http://+:{port}");
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Datenbank (mit PostgreSQL / Npgsql für Supabase)
+// Datenbank (mit PostgreSQL / Npgsql für Supabase) und erhöhtem Timeout gegen Cold Starts
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString, npgsqlOptions =>
+    {
+        npgsqlOptions.CommandTimeout(60); // Behebt Timeout-Fehler bei langsamen Cloud-Datenbanken (z.B. Supabase Free Tier)
+    }));
 
 // MVC + Razor Views
 builder.Services.AddControllersWithViews();
