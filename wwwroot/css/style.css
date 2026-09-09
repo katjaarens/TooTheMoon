@@ -668,3 +668,11 @@ footer {
 .mt-20 { margin-top: 20px; }
 .mb-20 { margin-bottom: 20px; }
 }
+
+.location-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #e0a99f; /* Hier auf Roségold geändert */
+    margin-top: 0;
+    margin-bottom: 12px;
+}
