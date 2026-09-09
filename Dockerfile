@@ -2,26 +2,28 @@
 # Build Stage
 # -----------------------------------------
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
 WORKDIR /source
 
-
-# Force rebuild layer
 COPY . .
 
 RUN dotnet restore
-RUN dotnet publish -c Release -o /app
+
+RUN dotnet publish -c Release -o /app --no-restore
 
 # -----------------------------------------
-# Run Stage
+# Runtime Stage
 # -----------------------------------------
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+
 WORKDIR /app
 
-# Copy published output
 COPY --from=build /app .
 
-# Expose port for Render
+# Render setzt die Variable PORT automatisch.
+# 8080 dient nur als Fallback.
 ENV ASPNETCORE_URLS=http://+:8080
+
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "TooTheMoon.dll"]
