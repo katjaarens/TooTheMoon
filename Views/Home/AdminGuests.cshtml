@@ -16,12 +16,12 @@
                 <p style="color: #94a3b8; margin-bottom: 0; font-size: 0.95rem;">Übersicht aller eingegangenen Zusagen und Statistiken</p>
             </div>
             <div class="d-flex align-items-center gap-3 flex-wrap">
-                <span style="background: rgba(244, 114, 182, 0.1); border: 1px solid rgba(244, 114, 182, 0.3); padding: 10px 18px; border-radius: 12px; font-size: 0.9rem; color: #e0a99f; display: inline-flex; align-items: center; gap: 8px;">
+                <span style="background: rgba(224, 169, 159, 0.1); border: 1px solid rgba(224, 169, 159, 0.3); padding: 10px 18px; border-radius: 12px; font-size: 0.9rem; color: #e0a99f; display: inline-flex; align-items: center; gap: 8px;">
                     👤 Eingeloggt als: <strong style="color: #fff;">@Context.Session.GetString("AdminName")</strong>
                 </span>
 
                 <!-- Button für den Sitzplan -->
-                <a class="btn btn-primary" href="@Url.Action("AdminSeatingPlanner", "Home")" style="padding: 10px 18px; border-radius: 12px; font-size: 0.9rem;">Sitzplan verwalten</a>
+                <a class="btn btn-primary" href="@Url.Action("AdminSeatingPlanner", "Home")" style="padding: 10px 18px; border-radius: 12px; font-size: 0.9rem; background: #4c1d95; border-color: rgba(224, 169, 159, 0.4);">Sitzplan verwalten</a>
 
                 <!-- Der Abmelden-Button -->
                 <form asp-controller="Home" asp-action="Logout" method="post" class="m-0">
@@ -46,18 +46,18 @@
 
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div style="background: rgba(0,0,0,0.2); padding: 15px 20px; border-radius: 12px; border-left: 4px solid #34d399;">
+                    <div style="background: rgba(0,0,0,0.2); padding: 15px 20px; border-radius: 12px; border-left: 4px solid #e0a99f;">
                         <span style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 4px;">GESAMTPERSONEN</span>
-                        <span style="font-size: 1.5rem; font-weight: bold; color: #34d399;">@totalPersons</span>
+                        <span style="font-size: 1.5rem; font-weight: bold; color: #e0a99f;">@totalPersons</span>
                         <span style="color: #cbd5e1; font-size: 0.9rem; margin-left: 8px;">(@totalAdults Erwachsene, @totalChildren Kinder)</span>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div style="background: rgba(0,0,0,0.2); padding: 15px 20px; border-radius: 12px; border-left: 4px solid #60a5fa;">
+                    <div style="background: rgba(0,0,0,0.2); padding: 15px 20px; border-radius: 12px; border-left: 4px solid #e0a99f;">
                         <span style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 4px;">CATERING-SUMMEN</span>
                         <div style="font-size: 1rem; margin-top: 4px;">
-                            <span style="color: #60a5fa; font-weight: 500;">@totalMeat x Fleisch</span> &bull; 
-                            <span style="color: #34d399; font-weight: 500;">@totalVeggie x Vegetarisch</span> &bull; 
+                            <span style="color: #f3c68f; font-weight: 500;">@totalMeat x Fleisch</span> &bull; 
+                            <span style="color: #d4a373; font-weight: 500;">@totalVeggie x Vegetarisch</span> &bull; 
                             <span style="color: #e0a99f; font-weight: 500;">@totalVegan x Vegan</span>
                         </div>
                     </div>
@@ -71,10 +71,10 @@
                 <input type="text" id="guestSearch" placeholder="🔍 Nach Name oder E-Mail suchen..." onkeyup="filterGuests()" style="width: 100%; padding: 10px 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; color: #fff; font-size: 0.9rem;" />
             </div>
             <div class="d-flex gap-2 flex-wrap">
-                <button onclick="setFilter('all', event)" class="filter-btn" style="padding: 8px 14px; background: rgba(244, 114, 182, 0.2); border: 1px solid #f472b6; color: #fff; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">Alle</button>
+                <button onclick="setFilter('all', event)" class="filter-btn" style="padding: 8px 14px; background: rgba(224, 169, 159, 0.2); border: 1px solid #e0a99f; color: #fff; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">Alle</button>
                 <button onclick="setFilter('attending', event)" class="filter-btn" style="padding: 8px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">Nur Zusagen</button>
                 <button onclick="setFilter('declined', event)" class="filter-btn" style="padding: 8px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">Nur Absagen</button>
-                <button onclick="setFilter('veggie', event)" class="filter-btn" style="padding: 8px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">🥦 Vegetarisch/Vegan</button>
+                <button onclick="setFilter('veggie', event)" class="filter-btn" style="padding: 8px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; border-radius: 8px; cursor: pointer; font-size: 0.85rem;">🥗 Vegetarisch/Vegan</button>
             </div>
         </div>
 
@@ -108,7 +108,7 @@
                                 <td style="padding: 15px 12px; background: transparent;">
                                     @if (guest.IsAttending)
                                     {
-                                        <span class="badge" style="background: rgba(52, 211, 153, 0.15); color: #34d399; padding: 6px 12px; border-radius: 6px; font-weight: 500;">Zusage</span>
+                                        <span class="badge" style="background: rgba(224, 169, 159, 0.15); color: #e0a99f; padding: 6px 12px; border-radius: 6px; font-weight: 500;">Zusage</span>
                                     }
                                     else
                                     {
@@ -120,8 +120,8 @@
                                     <span style="color: #94a3b8; font-size: 0.8rem; display: block;">(@guest.AdultsCount Erw., @guest.ChildrenCount Ki.)</span>
                                 </td>
                                 <td style="padding: 15px 12px; background: transparent;">
-                                    <span style="color: #60a5fa;">F: @guest.MeatCount</span> | 
-                                    <span style="color: #34d399;">V: @guest.VeggieCount</span> | 
+                                    <span style="color: #f3c68f;">F: @guest.MeatCount</span> | 
+                                    <span style="color: #d4a373;">V: @guest.VeggieCount</span> | 
                                     <span style="color: #e0a99f;">Vg: @guest.VeganCount</span>
                                     @if(!string.IsNullOrEmpty(guest.FoodIntolerances))
                                     {
@@ -167,8 +167,8 @@
             btn.style.color = '#94a3b8';
         });
         
-        event.target.style.background = 'rgba(244, 114, 182, 0.2)';
-        event.target.style.borderColor = '#f472b6';
+        event.target.style.background = 'rgba(224, 169, 159, 0.2)';
+        event.target.style.borderColor = '#e0a99f';
         event.target.style.color = '#fff';
 
         filterGuests();
