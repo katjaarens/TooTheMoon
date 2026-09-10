@@ -676,3 +676,167 @@ footer {
     margin-top: 0;
     margin-bottom: 12px;
 }
+
+/* --- ANGEPASSTES CSS FÜR COSMIC-RING-EFFEKT --- */
+
+/* 1. Die Karte (angepasst an glass-panel Stil) */
+.witness-card {
+  /* Hintergrundfarbe der glass-box aufgreifen */
+  background: rgba(17, 24, 39, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  /* Rahmen und Schatten wie im HTML */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  
+  /* Einheitliche Rundung */
+  border-radius: 16px; 
+  
+  text-align: center;
+  width: 100%;
+  max-width: 400px; /* Maximalbreite erhöht, passend zum HTML Grid */
+  position: relative;
+  margin: 0; /* Margin entfernt, Gap im HTML übernimmt den Abstand */
+  padding: 30px;
+  display: flex; /* Um Elemente innerhalb gut anzuordnen */
+  flex-direction: column;
+  height: 100%; /* Füllt die Grid-Zelle aus */
+}
+
+/* 2. Wrapper, um Bild und Ring zu positionieren */
+.cosmic-avatar-wrapper {
+  position: relative;
+  width: 120px; /* Größe an HTML angepasst (war 140px) */
+  height: 120px;
+  margin: 0 auto 20px auto; /* Zentriert, Abstand unten wie im HTML */
+}
+
+/* 3. Das eigentliche Bild (angepasst) */
+.cosmic-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  /* Hellerer Rand passend zum Farbschema */
+  border: 2px solid #e0a99f; 
+  position: relative;
+  z-index: 2; /* Bild liegt über dem Ring */
+  display: block;
+}
+
+/* 4. Der kosmische Ring (Farbverlauf bleibt) */
+.cosmic-ring {
+  position: absolute;
+  /* Etwas weiter nach außen gesetzt, damit der Rand sichtbar bleibt */
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border-radius: 50%;
+  
+  /* Dein Farbverlauf */
+  background: conic-gradient(
+    from 0deg, 
+    #c49a6c 0deg,   /* Gold */
+    #e6bf97 90deg,  /* Helles Gold */
+    #f6a6e0 180deg, /* Rosa */
+    #c774e8 270deg, /* Lila */
+    #c49a6c 360deg  /* Zurück zu Gold */
+  );
+  
+  opacity: 0.9;
+  filter: blur(1.5px);
+  z-index: 1; /* Ring liegt unter dem Bild */
+}
+
+/* 5. Das innere Loch des Rings (WICHTIG: Transparenz der Karte) */
+.cosmic-ring::after {
+  content: '';
+  position: absolute;
+  top: 4px; /* Dicke des sichtbaren Rings */
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border-radius: 50%;
+  
+  /* WICHTIG: Muss exakt den Hintergrund der Karte haben */
+  background-color: rgba(17, 24, 39, 0.65); 
+  
+  z-index: 2;
+}
+
+/* 6. Text-Stile (teilweise aus deinem HTML übernommen, hier nur Feinschliff) */
+
+/* Name (Größe aus HTML: 1.4rem) */
+.witness-card h3 {
+  font-family: 'Playfair Display', serif;
+  color: #ffffff;
+  font-size: 1.4rem; 
+  margin: 0 0 5px 0;
+  font-weight: 700;
+}
+
+/* Rolle (Farbe/Größe aus HTML) */
+.witness-card .role-badge {
+  position: static; /* Positionierung im Fluss, nicht absolut über Bild */
+  transform: none;
+  background: none; /* Kein Hintergrund-Badge mehr, nur Text */
+  backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  
+  color: #e0a99f;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 15px;
+  font-weight: bold;
+  padding: 0;
+}
+
+/* Beschreibung */
+.witness-description {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Anekdoten-Container (aus HTML übernommen) */
+.witness-details {
+  text-align: left;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.witness-details p { margin: 0; }
+.witness-details strong { color: #ffffff; }
+
+/* Telefon-Button (aus HTML übernommen) */
+.witness-phone-wrap {
+  margin-top: auto; /* Drückt den Button immer ganz nach unten */
+  background: rgba(224, 169, 159, 0.1); /* Subtiler Gold-Hintergrund */
+  padding: 10px 20px;
+  border-radius: 25px;
+  display: inline-block;
+  border: 1px solid #e0a99f;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.witness-phone-wrap:hover {
+  background: rgba(224, 169, 159, 0.2);
+  transform: translateY(-2px);
+}
+
+.witness-phone-link {
+  color: #e0a99f !important;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
