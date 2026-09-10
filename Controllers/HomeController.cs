@@ -212,7 +212,9 @@ public class HomeController : Controller
 
         try
         {
+            // Optimiert: Tische inklusive zugewiesener Gäste direkt per JOIN laden
             var tables = await _context.WeddingTables
+                .Include(t => t.Guests)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -223,13 +225,6 @@ public class HomeController : Controller
             ViewBag.AttendingGuests = allGuests
                 .Where(g => g.IsAttending)
                 .ToList();
-
-            foreach (var table in tables)
-            {
-                table.Guests = allGuests
-                    .Where(g => g.WeddingTableId == table.Id)
-                    .ToList();
-            }
 
             return View(tables);
         }
