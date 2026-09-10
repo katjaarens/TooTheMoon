@@ -840,3 +840,97 @@ footer {
   font-size: 1.1rem;
   font-weight: bold;
 }
+
+/* --- CSS-Code für den Cosmic-Ring-Effekt --- */
+/* --- Passt perfekt zu deinem dunklen Farbschema --- */
+
+/* Wrapper, um Bild und Ring absolut zu positionieren */
+.cosmic-avatar-wrapper {
+  position: relative;
+  width: 150px; /* Größe des Avatars (kannst du anpassen) */
+  height: 150px;
+  margin: 0 auto 20px auto; /* Zentriert, mit Abstand unten */
+  /* Optional: Ein kleiner Schatten unter dem gesamten Gebilde */
+  filter: drop-shadow(0 4px 15px rgba(0,0,0,0.3));
+}
+
+/* Das eigentliche runde Bild */
+.cosmic-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* Perfekter Kreis */
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1); /* Subtiler innerer Rand */
+  position: relative;
+  z-index: 2; /* Bild liegt ÜBER dem Ring */
+  display: block;
+}
+
+/* Der schräge, glühende Ring */
+.cosmic-ring {
+  position: absolute;
+  /* Der Ring ist etwas größer als das Bild (-10px auf jeder Seite) */
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  
+  /* Der Farbverlauf (Conic Gradient) für den Cosmic-Look */
+  /* Farben: Gold -> Hellgold -> Rosa -> Lila -> Gold */
+  background: conic-gradient(
+    from 45deg, /* Dreht den Verlauf leicht, damit er "schräg" wirkt */
+    #c49a6c 0deg,   /* Gold (Start) */
+    #e6bf97 90deg,  /* Helles Gold */
+    #f6a6e0 180deg, /* Rosa */
+    #c774e8 270deg, /* Lila */
+    #c49a6c 360deg  /* Zurück zu Gold (Ende) */
+  );
+  
+  /* Transparenz und Weichzeichnung für den Glüheffekt */
+  opacity: 0.85;
+  filter: blur(1.5px); /* Verleiht dem Metall-Look Weiche */
+  z-index: 1; /* Ring liegt UNTER dem Bild */
+}
+
+/* WICHTIG: Wir benutzen ein ::after Pseudo-Element, um das Loch in den Ring zu stanzen, 
+   damit der Hintergrund der Karte in der Mitte des Rings sichtbar bleibt.
+   **Hier musst du die Hintergrundfarbe deiner Karte anpassen!** */
+.cosmic-ring::after {
+  content: '';
+  position: absolute;
+  /* Bestimmt die Dicke des sichtbaren Rings (hier 3px) */
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border-radius: 50%;
+  
+  /* --- HIER ANPASSEN --- */
+  /* Diese Farbe muss EXAKT dem Hintergrund deines glass-panel entsprechen! 
+     Im Bild ist es: background: rgba(17, 24, 39, 0.65); */
+  background-color: rgba(17, 24, 39, 0.65);
+  
+  z-index: 2; /* Liegt auf dem Ring, aber unter dem Bild */
+}
+
+/* 3. Text-Anpassungen für dein Farbschema (optional, aber empfohlen) */
+
+.witness-card h3 {
+  /* Beibehaltung deiner Playfair Display Font */
+  font-family: 'Playfair Display', serif;
+  color: #ffffff;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.role-badge {
+  /* Die kupfer/roségoldene Farbe aus dem Bild für die Rolle */
+  color: #e0a99f; 
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: block;
+}
